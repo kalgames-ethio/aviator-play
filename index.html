@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Game</title>
+    <style>
+        body { background: #1a1a1a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        #history { width: 100%; max-width: 400px; display: flex; gap: 5px; overflow-x: auto; margin-bottom: 15px; padding: 5px; background: #2a2a2a; border-radius: 8px; }
+        .hist-item { padding: 4px 10px; border-radius: 5px; font-size: 13px; font-weight: bold; color: white; }
+        .high { background: #9c27b0; }
+        .low { background: #2196f3; }
+        #game-box { border: 2px solid #ff0044; padding: 20px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px; background: #222; }
+        #multiplier { font-size: 55px; margin: 20px 0; font-weight: bold; color: #ff0044; }
+    </style>
+</head>
+<body>
+    <div id="history"></div>
+    <div id="game-box">
+        <div id="multiplier">1.00x</div>
+        <p>ጨዋታው በቅርብ ቀን በቦቱ ላይ ይጀምራል!</p>
+    </div>
+    <script>
+        function addHistory(val) {
+            let hDiv = document.getElementById('history');
+            let item = document.createElement('div');
+            item.className = 'hist-item ' + (val >= 2 ? 'high' : 'low');
+            item.innerText = val + "x";
+            hDiv.prepend(item);
+        }
+        setInterval(() => {
+            let val = (Math.random() * 4 + 1).toFixed(2);
+            addHistory(val);
+            document.getElementById('multiplier').innerText = val + "x";
+        }, 3000);
+    </script>
+</body>
+</html>
