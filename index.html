@@ -36,3 +36,56 @@
     </script>
 </body>
 </html>
+.bet-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    width: 90%;
+    max-width: 360px;
+}
+.input-group {
+    display: flex;
+    align-items: center;
+    background-color: #2d2d2d;
+    border-radius: 10px;
+    padding: 5px 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.currency {
+    color: #ff003f;
+    font-weight: bold;
+    margin-right: 10px;
+}
+#bet-amount {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 100%;
+    outline: none;
+}
+#bet-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+<div class="bet-container">
+    <div class="input-group">
+        <span class="currency">ETB</span>
+        <input type="number" id="bet-amount" value="10" min="1">
+    </div>
+    <button id="bet-btn">BET</button>
+</div>
