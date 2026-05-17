@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="am">
 <head>
@@ -268,7 +269,7 @@
                 </div>
                 <div class="quick-chips">
                     <button class="chip-btn" onclick="setAmount(2, 4)">4</button>
-                    <button class="chip-btn" onclick="setAmount(2, 10)">100</button>
+                    <button class="chip-btn" onclick="setAmount(2, 10)">10</button>
                     <button class="chip-btn" onclick="setAmount(2, 40)">40</button>
                     <button class="chip-btn" onclick="setAmount(2, 100)">100</button>
                 </div>
@@ -295,10 +296,6 @@
         
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
-
-        // ✈️ እውነተኛውን የ Aviator ቀይ አውሮፕላን በምስል (PNG) መጫኛ
-        const airplaneImg = new Image();
-        airplaneImg.src = 'https://i.postimg.cc/85zX7xXg/aviator-plane.png'; 
 
         const pastResults = [1.45, 2.70, 1.12, 5.84, 1.22, 19.50];
         function renderHistory() {
@@ -334,6 +331,50 @@
             for (let y = 15; y < canvas.height - 20; y += 15) ctx.fillRect(25, y, 1.5, 1.5);
         }
 
+        // ✈️ 100% አስተማማኝ እና የተስተካከለ የቀይ አውሮፕላን የኮድ ስዕል
+        function drawAviatorJet(x, y) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(-0.08); // ትንሽ ቀና ብሎ እንዲበር
+
+            // የጄት ዋና አካል
+            ctx.fillStyle = '#cb0130';
+            ctx.beginPath();
+            ctx.moveTo(22, 0);
+            ctx.quadraticCurveTo(10, -7, -15, -5);
+            ctx.lineTo(-22, -11);
+            ctx.lineTo(-25, -11);
+            ctx.lineTo(-22, 0);
+            ctx.lineTo(-25, 11);
+            ctx.lineTo(-22, 11);
+            ctx.quadraticCurveTo(-15, 7, 22, 0);
+            ctx.fill();
+
+            // የኋላ ክንፎች
+            ctx.fillStyle = '#b00128';
+            ctx.beginPath();
+            ctx.moveTo(-2, -4);
+            ctx.lineTo(-12, -23);
+            ctx.lineTo(-18, -23);
+            ctx.lineTo(-8, -4);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(-2, 4);
+            ctx.lineTo(-12, 23);
+            ctx.lineTo(-18, 23);
+            ctx.lineTo(-8, 4);
+            ctx.fill();
+
+            // የሞተር ፍንጣቂ ነጭ ብርሃን
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.arc(-23, 0, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
         function drawGame() {
             drawBackground();
             
@@ -343,7 +384,7 @@
                 let endX = startX + flightProgress * (canvas.width - 75);
                 let endY = startY - Math.pow(flightProgress, 2.2) * (canvas.height - 75);
 
-                // ጥላ መሙያ
+                // ስስ ቀይ ጥላ (Gradient Area)
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 let cpX = startX + (endX - startX) * 0.6;
@@ -358,7 +399,7 @@
                 ctx.fillStyle = fillGrad;
                 ctx.fill();
 
-                // ቀጭኑ ቀይ መስመር
+                // ቀጭኑ ደማቅ ቀይ መስመር
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 ctx.quadraticCurveTo(cpX, cpY, endX, endY);
@@ -366,13 +407,8 @@
                 ctx.lineWidth = 2.5;
                 ctx.stroke();
 
-                // ✈️ እውነተኛውን አውሮፕላን በካንቫሱ ላይ መሳል
-                if (airplaneImg.complete) {
-                    ctx.save();
-                    ctx.translate(endX, endY);
-                    ctx.drawImage(airplaneImg, -23, -15, 46, 30);
-                    ctx.restore();
-                }
+                // አውሮፕላኑን መሳል
+                drawAviatorJet(endX, endY);
             }
         }
 
