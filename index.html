@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalgames Aviator Pro - Ultimate Edition</title>
+    <title>Kalgames Aviator Pro - Luxury Edition</title>
     <style>
         /* Base & Reset Styles */
         * {
@@ -141,11 +141,11 @@
         .sub-section h3 { font-size: 13px; color: #7a8b9e; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .list-item { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #1f2630; }
 
-        /* Updated Asset Gallery Grid for the 6 new images */
+        /* Updated Asset Gallery Grid for the 6 newly uploaded images */
         .asset-gallery { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
         .asset-card { background: #111419; border: 1px solid #232a33; border-radius: 6px; padding: 2px; text-align: center; }
-        .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(20%); transition: transform 0.2s, filter 0.2s; }
-        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.03); }
+        .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(15%); transition: transform 0.2s, filter 0.2s; }
+        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.04); }
 
         /* Custom Toast Container */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; }
@@ -242,12 +242,12 @@
             </div>
 
             <div class="asset-gallery">
-                <div class="asset-card"><img src="1000002613.jpg" alt="Asset 13"></div>
-                <div class="asset-card"><img src="1000002614.jpg" alt="Asset 14"></div>
-                <div class="asset-card"><img src="1000002615.jpg" alt="Asset 15"></div>
-                <div class="asset-card"><img src="1000002616.jpg" alt="Asset 16"></div>
-                <div class="asset-card"><img src="1000002617.jpg" alt="Asset 17"></div>
-                <div class="asset-card"><img src="1000002618.jpg" alt="Asset 18"></div>
+                <div class="asset-card"><img src="1000002619.jpg" alt="Asset 19"></div>
+                <div class="asset-card"><img src="1000002620.jpg" alt="Asset 20"></div>
+                <div class="asset-card"><img src="1000002621.jpg" alt="Asset 21"></div>
+                <div class="asset-card"><img src="1000002622.jpg" alt="Asset 22"></div>
+                <div class="asset-card"><img src="1000002623.jpg" alt="Asset 23"></div>
+                <div class="asset-card"><img src="1000002624.jpg" alt="Asset 24"></div>
             </div>
         </div>
 
@@ -285,12 +285,12 @@
         let balance = parseFloat(localStorage.getItem(storageKey)) || 1000.00;
         let pastResults = JSON.parse(localStorage.getItem("aviator_history_pro")) || [1.32, 4.50, 1.05, 12.80, 2.10, 1.85];
         
-        document.getElementById('balance-amount').innerText = balance.toFixed(2);
+            document.getElementById('balance-amount').innerText = balance.toFixed(2);
 
         function updateBalance(amount) {
             balance += amount;
             localStorage.setItem(storageKey, balance);
-            document.getElementById('balance-amount').innerText = balance.toFixed(2);
+                document.getElementById('balance-amount').innerText = balance.toFixed(2);
         }
 
         const canvas = document.getElementById('gameCanvas');
@@ -311,14 +311,14 @@
         let isPlaneLoaded = false;
         planeImg.onload = () => { isPlaneLoaded = true; };
 
-        // Updated Array for the 6 newly uploaded image assets
+        // Updated Structural Sources Array for the 6 latest uploaded image assets
         const assetSrcs = [
-            "1000002613.jpg", 
-            "1000002614.jpg", 
-            "1000002615.jpg", 
-            "1000002616.jpg", 
-            "1000002617.jpg", 
-            "1000002618.jpg"
+            "1000002619.jpg", 
+            "1000002620.jpg", 
+            "1000002621.jpg", 
+            "1000002622.jpg", 
+            "1000002623.jpg", 
+            "1000002624.jpg"
         ];
         const gameAssets = [];
         assetSrcs.forEach(src => {
@@ -336,13 +336,13 @@
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
 
-        // Particles system for background floating images
+        // Particles system for background floating structural images
         let backgroundParticles = [];
         for(let i=0; i<6; i++) { 
             backgroundParticles.push({ 
                 x: Math.random() * 500, 
                 y: Math.random() * 150, 
-                speed: 0.3 + Math.random() * 0.4 
+                speed: 0.35 + Math.random() * 0.45 
             }); 
         }
 
@@ -352,7 +352,7 @@
             toast.className = 'toast';
             toast.innerText = message;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2700);
+                setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2700);
         }
 
         function renderHistoryRibbon() {
@@ -483,7 +483,7 @@
             }, 3000);
         }
 
-        // DrawJet Core Function
+        // DrawJet Vector Mechanics
         function drawJet(x, y) {
             ctx.save();
             ctx.translate(x, y);
@@ -491,7 +491,7 @@
             let angle = -0.15 + (flightProgress * 0.0006);
             ctx.rotate(angle);
 
-            // Glow Effect
+            // Glow FX
             ctx.shadowColor = "#ff0000";
             ctx.shadowBlur = 20;
 
@@ -502,7 +502,7 @@
                 ctx.beginPath(); ctx.moveTo(15, 0); ctx.quadraticCurveTo(5, -5, -10, -3); ctx.lineTo(-14, 0); ctx.lineTo(-10, 5); ctx.closePath(); ctx.fill();
             }
 
-            // Engine flame design
+            // Flame Vector Propulsion
             ctx.beginPath();
             ctx.moveTo(-28, 0);
             ctx.lineTo(-45, -6);
@@ -519,25 +519,24 @@
             ctx.restore();
         }
 
-        // Main Draw Interval Loop Frame Engine
+        // Main Draw Loop Frame Engine
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Floating Background Asset Particles Layer (Using the new 6 images)
+            // Floating Translucent Structural Images Layers
             backgroundParticles.forEach((p, index) => {
                 ctx.save();
                 let assetIndex = index % gameAssets.length;
                 if (gameAssets[assetIndex] && gameAssets[assetIndex].complete) {
-                    ctx.globalAlpha = 0.12; // Translucent floating effect
-                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 28, 28);
+                    ctx.globalAlpha = 0.14; // Premium faint watermark style motion
+                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 30, 30);
                 } else {
-                    ctx.beginPath(); ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
-                    ctx.fillStyle = "rgba(40, 50, 68, 0.1)"; ctx.fill();
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = "rgba(40, 50, 68, 0.08)"; ctx.fill();
                 }
                 ctx.restore();
 
-                // Dynamic speed adjustments based on game status
-                p.x -= gameState === "running" ? p.speed * (multiplier * 0.4) : p.speed * 0.15;
+                p.x -= gameState === "running" ? p.speed * (multiplier * 0.42) : p.speed * 0.16;
                 if(p.x < -40) p.x = canvas.width + 30;
             });
 
@@ -553,7 +552,7 @@
                 if (bet1.status === 'active') document.getElementById('sub-1').innerText = (bet1.amount * multiplier).toFixed(2) + " ETB";
                 if (bet2.status === 'active') document.getElementById('sub-2').innerText = (bet2.amount * multiplier).toFixed(2) + " ETB";
 
-                // Flight Path Curve Grid
+                // Curve Tracking Path
                 ctx.beginPath();
                 ctx.moveTo(60, canvas.height - 50);
 
@@ -572,7 +571,7 @@
                 ctx.stroke();
                 ctx.shadowBlur = 0; 
 
-                // Jet Vector Lock Coordinates
+                // Locking Physics Transform Coordinates
                 let jetX = 60 + flightProgress;
                 let jetY = (canvas.height - 50) - Math.pow(flightProgress * 0.08, 1.4);
                 
@@ -589,7 +588,7 @@
             requestAnimationFrame(draw);
         }
 
-        // Live Bets Board Updates
+        // Live Bets Board Engine
         function updateLiveBoard() {
             const board = document.getElementById('live-bets-board');
             let fakeTotal = 0;
@@ -614,7 +613,7 @@
             document.getElementById('total-bets-display').innerText = fakeTotal + " ETB";
         }
 
-        // Live Chat Messages
+        // Live Room Chat Messages
         const chats = ["🔥 Nice win!", "🚀 Going high today", "😅 Crash at 1.00x", "💰 Big cashout!", "👀 Watch this round"];
 
         function updateChat() {
@@ -652,7 +651,7 @@
             }
         }
 
-        // Initial Engine Loops
+        // Initialize Core Loops
         renderHistoryRibbon();
         updateLiveBoard();
         updateChat();
