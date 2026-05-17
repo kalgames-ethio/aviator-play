@@ -1,181 +1,90 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="am">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Game</title>
+    <title>Kalgames Aviator</title>
     <style>
-        body { background: #1a1a1a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        #history { width: 100%; max-width: 400px; display: flex; gap: 5px; overflow-x: auto; margin-bottom: 15px; padding: 5px; background: #2a2a2a; border-radius: 8px; }
-        .hist-item { padding: 4px 10px; border-radius: 5px; font-size: 13px; font-weight: bold; color: white; }
+        body { margin: 0; background-color: #000; color: #fff; font-family: 'Roboto', sans-serif; display: flex; flex-direction: column; align-items: center; }
+        
+        /* ከላይ ያለ መረጃ */
+        .top-bar { width: 100%; max-width: 380px; display: flex; justify-content: space-between; align-items: center; padding: 10px; box-sizing: border-box; background: #1c1c1e; border-bottom: 1px solid #333; }
+        .logo { font-size: 20px; font-weight: bold; color: #e91e63; }
+        .balance { font-size: 16px; color: #4caf50; }
+
+        /* ያለፉ ውጤቶች */
+        #history-bar { display: flex; gap: 5px; width: 100%; max-width: 380px; padding: 5px; overflow-x: auto; background: #1c1c1e; border-bottom: 1px solid #333; }
+        .hist-item { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: #fff; }
         .high { background: #9c27b0; }
         .low { background: #2196f3; }
-        #game-box { border: 2px solid #ff0044; padding: 20px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px; background: #222; }
-        #multiplier { font-size: 55px; margin: 20px 0; font-weight: bold; color: #ff0044; }
-    </style>
-</head>
-<body>
-    <div id="history"></div>
-    <div id="game-box">
-        <div id="multiplier">1.00x</div>
-        <p>ጨዋታው በቅርብ ቀን በቦቱ ላይ ይጀምራል!</p>
-    </div>
-    <script>
-        function addHistory(val) {
-            let hDiv = document.getElementById('history');
-            let item = document.createElement('div');
-            item.className = 'hist-item ' + (val >= 2 ? 'high' : 'low');
-            item.innerText = val + "x";
-            hDiv.prepend(item);
-        }
-        setInterval(() => {
-            let val = (Math.random() * 4 + 1).toFixed(2);
-            addHistory(val);
-            document.getElementById('multiplier').innerText = val + "x";
-        }, 3000);
-    </script>
-</body>
-</html>
-<style>
-<!DOCTYPE html>
-<html lang="am">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Game</title>
-    <style>
-    body { 
-        background: #1a1a1a; 
-        color: #fff; 
-        font-family: Arial, sans-serif; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        padding: 10px; 
-        margin: 0;
-    }
-    #history { 
-        display: flex; 
-        gap: 5px; 
-        margin-bottom: 15px; 
-        overflow-x: auto; 
-        width: 90%; 
-        max-width: 380px;
-        padding: 5px 0;
-    }
-    .hist-item { 
-        padding: 5px 10px; 
-        border-radius: 5px; 
-        font-size: 11px; 
-        font-weight: bold; 
-        color: #fff;
-    }
-    .high { background: #9c27b0; }
-    .low { background: #2196f3; }
 
-    #game-box { 
-        border: 2px solid #ff003f; 
-        border-radius: 15px; 
-        padding: 30px 20px; 
-        text-align: center; 
-        width: 90%; 
-        max-width: 380px; 
-        background: #151515;
-        box-shadow: 0 4px 15px rgba(255, 0, 63, 0.2);
-        box-sizing: border-box;
-    }
-    #multiplier { 
-        font-size: 55px; 
-        max-width: 380px; 
-        font-weight: bold; 
-        color: #ff003f; 
-        margin-bottom: 15px;
-    }
-    .status-text {
-        font-size: 14px;
-        color: #bbb;
-    }
+        /* የጨዋታው ሜዳ */
+        .game-canvas-area { position: relative; width: 95%; max-width: 360px; height: 180px; margin-top: 15px; background: #151515; border-radius: 12px; border: 2px solid #e91e63; box-shadow: 0 4px 15px rgba(233, 30, 99, 0.2); overflow: hidden; }
+        #gameCanvas { width: 100%; height: 100%; }
+        #multiplier-overlay { position: absolute; top: 40%; left: 0; width: 100%; text-align: center; font-size: 50px; font-weight: bold; color: #e91e63; text-shadow: 0 0 10px rgba(233, 30, 99, 0.5); }
+        .status-msg { font-size: 14px; color: #bbb; position: absolute; bottom: 10px; width: 100%; text-align: center; }
 
-    /* የመወራረጃ ሳጥን ማስተካከያ (ልክ እንደ ቀዩ ሳጥን ሰፊ እንዲሆን) */
-    .bet-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: #151515;
-        padding: 20px;
-        border-radius: 15px;
-        margin-top: 15px;
-        width: 100%;
-        max-width: 380px;
-        box-sizing: border-box;
-        border: 1px solid #2d2d2d;
-    }
-    .input-group {
-        display: flex;
-        align-items: center;
-        background-color: #252525;
-        border-radius: 10px;
-        padding: 12px 15px;
-        margin-bottom: 15px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .currency {
-        color: #ff003f;
-        font-weight: bold;
-        margin-right: 15px;
-        font-size: 1.2rem;
-    }
-    #bet-amount {
-        background: none;
-        border: none;
-        color: #fff;
-        font-size: 1.4rem;
-        font-weight: bold;
-        width: 100%;
-        outline: none;
-        text-align: center;
-    }
-    #bet-btn {
-        background-color: #2cba42;
-        color: white;
-        border: none;
-        padding: 15px;
-        font-size: 1.4rem;
-        font-weight: bold;
-        border-radius: 10px;
-        width: 100%;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(44, 186, 66, 0.3);
-    }
-    #bet-btn:active {
-        background-color: #218838;
-    }
+        /* የመወራረጃ ፓነል */
+        .bet-area { width: 95%; max-width: 360px; margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .bet-panel { background: #151515; padding: 15px; border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; align-items: center; }
+        .amount-control { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; width: 100%; background: #2c2c2e; border-radius: 8px; padding: 5px 10px; box-sizing: border-box; }
+        .currency { color: #e91e63; font-weight: bold; }
+        .amount-input { background: none; border: none; color: #fff; font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center; outline: none; }
+        .bet-button { background-color: #4caf50; color: white; border: none; padding: 12px; font-size: 1.3rem; font-weight: bold; border-radius: 8px; width: 100%; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); }
+        .bet-button:active { background-color: #388e3c; }
     </style>
 </head>
 <body>
 
-    <div id="history"></div>
-
-    <div id="game-box">
-        <div id="multiplier">1.00x</div>
-        <div class="status-text">ጨዋታው በቅርብ ቀን በቦቱ ላይ ይጀምራል!</div>
+    <div class="top-bar">
+        <span class="logo">Aviator</span>
+        <span class="balance" id="player-balance">1,000 ETB</span>
     </div>
 
-    <div class="bet-container">
-        <div class="input-group">
-            <span class="currency">ETB</span>
-            <input type="number" id="bet-amount" value="10" min="1">
+    <div id="history-bar">
         </div>
-        <button id="bet-btn">BET</button>
+
+    <div class="game-canvas-area">
+        <canvas id="gameCanvas"></canvas>
+        <div id="multiplier-overlay">1.00x</div>
+        <div class="status-msg" id="status-text">አውሮፕላኑ እየበረረ ነው...</div>
+    </div>
+
+    <div class="bet-area">
+        <div class="bet-panel">
+            <div class="amount-control">
+                <span class="currency">ETB</span>
+                <input type="number" class="amount-input" id="bet-amount-1" value="10" min="1">
+            </div>
+            <button class="bet-button" onclick="placeBet(1)">BET</button>
+        </div>
+        <div class="bet-panel">
+            <div class="amount-control">
+                <span class="currency">ETB</span>
+                <input type="number" class="amount-input" id="bet-amount-2" value="20" min="1">
+            </div>
+            <button class="bet-button" onclick="placeBet(2)">BET</button>
+        </div>
     </div>
 
     <script>
-        const historyContainer = document.getElementById('history');
-        const multiplierElement = document.getElementById('multiplier');
+        const balanceElement = document.getElementById('player-balance');
+        const historyContainer = document.getElementById('history-bar');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const multiplierOverlay = document.getElementById('multiplier-overlay');
+        const statusText = document.getElementById('status-text');
 
-        // ያለፉ ውጤቶች ታሪክ (History)
-        const pastResults = [3.14, 1.58, 4.73, 1.30, 2.59];
+        let balance = 1000;
+        let isFlightInProgress = false;
+        let currentMultiplier = 1.0;
+        let crashPoint = 0;
+        let flightTime = 0;
+        let bet1 = { amount: 0, status: 'idle' };
+        let bet2 = { amount: 0, status: 'idle' };
+
+        // ያለፉ ውጤቶች ታሪክ
+        const pastResults = [21.46, 1.12, 2.17, 1.42, 1.00];
         pastResults.forEach(res => {
             const item = document.createElement('div');
             item.className = 'hist-item ' + (res >= 2 ? 'high' : 'low');
@@ -183,11 +92,87 @@
             historyContainer.appendChild(item);
         });
 
-        // ቁጥሩን በየጊዜው ለመቀየር
-        setInterval(() => {
-            const randomMultiplier = (Math.random() * 5 + 1);
-            multiplierElement.innerText = randomMultiplier.toFixed(2) + 'x';
-        }, 3000);
+        // የአውሮፕላን ምስል (SVG)
+        const planeImg = new Image();
+        planeImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23e91e63' d='M85,50 L45,20 V35 H15 V65 H45 V80 L85,50 Z'/%3E%3C/svg%3E";
+
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // የግራፍ መስመር
+            if (isFlightInProgress) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                for (let i = 0; i <= flightTime; i++) {
+                    const x = i * 2;
+                    const y = canvas.height - (Math.pow(1.03, i) * 1.5);
+                    if (y > 0) ctx.lineTo(x, y);
+                }
+                ctx.strokeStyle = '#e91e63';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // አውሮፕላን
+                const x = flightTime * 2;
+                const y = canvas.height - (Math.pow(1.03, flightTime) * 1.5) - 15;
+                if (x < canvas.width && y > 0) {
+                    ctx.drawImage(planeImg, x, y, 30, 30);
+                }
+            }
+        }
+
+        function startNewRound() {
+            flightTime = 0;
+            currentMultiplier = 1.0;
+            crashPoint = (Math.random() * 5 + 1.1).toFixed(2);
+            isFlightInProgress = true;
+            statusText.innerText = "አውሮፕላኑ እየበረረ ነው...";
+            
+            // BET ተደርጎ ከሆነ ብሩን ከባላንስ መቀነስ
+            if (bet1.amount > 0) { balance -= bet1.amount; bet1.status = 'active'; }
+            if (bet2.amount > 0) { balance -= bet2.amount; bet2.status = 'active'; }
+            balanceElement.innerText = balance + " ETB";
+
+            flightSequence();
+        }
+
+        function flightSequence() {
+            if (currentMultiplier < crashPoint && isFlightInProgress) {
+                flightTime += 1;
+                currentMultiplier = Math.pow(1.03, flightTime).toFixed(2);
+                multiplierOverlay.innerText = currentMultiplier + "x";
+                drawGame();
+                requestAnimationFrame(flightSequence);
+            } else {
+                crashGame();
+            }
+        }
+
+        function crashGame() {
+            isFlightInProgress = false;
+            multiplierOverlay.innerText = "FLEW AWAY!";
+            statusText.innerText = "ጨዋታው በ 10 ሰከንድ ውስጥ ይጀምራል...";
+            
+            // የጠፋውን ውርርድ መመዝገብ (ለቀጣይ ዙር ማጽዳት)
+            bet1 = { amount: 0, status: 'idle' };
+            bet2 = { amount: 0, status: 'idle' };
+            
+            setTimeout(startNewRound, 10000);
+        }
+
+        function placeBet(panelId) {
+            if (!isFlightInProgress && panelId === 1 && bet1.status === 'idle') {
+                bet1.amount = parseInt(document.getElementById('bet-amount-1').value);
+                document.querySelectorAll('.bet-button')[0].innerText = "WAITING";
+            } else if (!isFlightInProgress && panelId === 2 && bet2.status === 'idle') {
+                bet2.amount = parseInt(document.getElementById('bet-amount-2').value);
+                document.querySelectorAll('.bet-button')[1].innerText = "WAITING";
+            }
+        }
+
+        planeImg.onload = drawGame;
+        startNewRound();
     </script>
 </body>
 </html>
+       
