@@ -17,7 +17,7 @@
             user-select: none; 
         }
         
-        /* የላይኛው ማውጫ (Header) */
+        /* Header */
         .top-bar { 
             width: 100%; 
             max-width: 380px; 
@@ -46,7 +46,7 @@
             border: 1px solid #2c2c2e; 
         }
 
-        /* የታሪክ ማሳያ ባር */
+        /* History Bar */
         #history-bar { 
             display: flex; 
             gap: 6px; 
@@ -73,7 +73,7 @@
         .high { color: #c146e3; background: rgba(193, 70, 227, 0.15); border-color: rgba(193, 70, 227, 0.4); }
         .low { color: #3498db; background: rgba(52, 152, 219, 0.15); border-color: rgba(52, 152, 219, 0.4); }
 
-        /* የጨዋታው ሜዳ (Canvas Main Box) */
+        /* Canvas Screen */
         .game-canvas-area { 
             position: relative; 
             width: 95%; 
@@ -87,19 +87,18 @@
         }
         #gameCanvas { width: 100%; height: 100%; display: block; }
         
-        /* የመልቲፕላየር ቁጥር ማሳያ */
         #multiplier-overlay { 
             position: absolute; 
             top: 32%; 
             left: 0; 
             width: 100%; 
             text-align: center; 
-            font-size: 48px; 
+            font-size: 50px; 
             font-weight: 900; 
             color: #fff; 
             z-index: 10; 
             font-family: sans-serif; 
-            text-shadow: 0 4px 10px rgba(0,0,0,0.8); 
+            text-shadow: 0 4px 12px rgba(0,0,0,0.9); 
         }
         .status-msg { 
             font-size: 13px; 
@@ -112,7 +111,7 @@
             font-weight: 500; 
         }
 
-        /* ሙሉ የመወራረጃ ክፍሎች (Betting Interface) */
+        /* Betting Panels */
         .bet-area { 
             width: 95%; 
             max-width: 365px; 
@@ -133,7 +132,6 @@
             box-sizing: border-box; 
         }
         
-        /* የግራ ክፍል መቆጣጠሪያዎች */
         .controls-left { 
             display: flex; 
             flex-direction: column; 
@@ -148,17 +146,17 @@
             border-radius: 6px; 
             padding: 4px 8px; 
             border: 1px solid #2d303a; 
-            height: 36px; 
+            height: 38px; 
             box-sizing: border-box; 
         }
         .minus-btn, .plus-btn { 
             background: #232429; 
             border: none; 
             color: #aaa; 
-            width: 24px; 
-            height: 24px; 
+            width: 26px; 
+            height: 26px; 
             border-radius: 50%; 
-            font-size: 16px; 
+            font-size: 18px; 
             font-weight: bold; 
             cursor: pointer; 
             display: flex; 
@@ -169,14 +167,13 @@
             background: none; 
             border: none; 
             color: #fff; 
-            font-size: 15px; 
+            font-size: 16px; 
             font-weight: bold; 
-            width: 50px; 
+            width: 55px; 
             text-align: center; 
             outline: none; 
         }
         
-        /* የቺፕስ አዝራሮች (4, 10, 40, 100) */
         .quick-chips { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -186,15 +183,15 @@
             background: #101115; 
             border: 1px solid #232429; 
             color: #9a9da4; 
-            padding: 4px 0; 
-            font-size: 11px; 
+            padding: 5px 0; 
+            font-size: 12px; 
             font-weight: bold; 
             border-radius: 4px; 
             cursor: pointer; 
             text-align: center; 
         }
 
-        /* የቀኝ ክፍል - የ BET አዝራር */
+        /* ትልቁ አረንጓዴ BET አዝራር */
         .btn-container { 
             display: flex; 
             align-items: center; 
@@ -206,30 +203,30 @@
             background: #2cba42; 
             color: white; 
             border: none; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             width: 100%; 
             height: 100%; 
-            min-height: 72px; 
-            font-size: 18px; 
-            font-weight: 800; 
+            min-height: 76px; 
+            font-size: 22px; 
+            font-weight: 900; 
             cursor: pointer; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
-            line-height: 1.2; 
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.2); 
+            line-height: 1.1; 
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(44, 186, 66, 0.3);
         }
         .bet-button span { 
-            font-size: 12px; 
+            font-size: 13px; 
             font-weight: bold; 
-            color: rgba(255,255,255,0.8); 
-            margin-top: 2px; 
+            color: rgba(255, 255, 255, 0.9); 
+            margin-top: 3px; 
         }
         
-        /* የአዝራር ሁኔታዎች ቀለማት */
-        .bet-button.waiting { background: #e67e22; }
-        .bet-button.cashout { background: #cb0130; }
+        .bet-button.waiting { background: #e67e22; box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3); }
+        .bet-button.cashout { background: #cb0130; box-shadow: 0 4px 10px rgba(203, 1, 48, 0.3); }
     </style>
 </head>
 <body>
@@ -263,7 +260,7 @@
                 </div>
             </div>
             <div class="btn-container">
-                <button class="bet-button" id="btn-1" onclick="placeBet(1)">Bet<br><span id="sub-1">4.00 ETB</span></button>
+                <button class="bet-button" id="btn-1" onclick="placeBet(1)">BET<br><span id="sub-1">4.00 ETB</span></button>
             </div>
         </div>
 
@@ -282,7 +279,7 @@
                 </div>
             </div>
             <div class="btn-container">
-                <button class="bet-button" id="btn-2" onclick="placeBet(2)">Bet<br><span id="sub-2">4.00 ETB</span></button>
+                <button class="bet-button" id="btn-2" onclick="placeBet(2)">BET<br><span id="sub-2">4.00 ETB</span></button>
             </div>
         </div>
     </div>
@@ -304,7 +301,7 @@
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
 
-        const pastResults = [21.46, 1.12, 2.17, 1.42, 1.00, 1.86, 1.13];
+        const pastResults = [1.25, 5.43, 1.02, 2.17, 14.20, 1.86, 1.13];
         function renderHistory() {
             historyContainer.innerHTML = '';
             pastResults.slice(-7).reverse().forEach(res => {
@@ -315,52 +312,52 @@
             });
         }
 
-        // 🔵 እውነተኛ የጀርባ ጨረሮች (Sunburst Background Rays)
+        // 🔵 የተስተካከለ ጨረር - ከመሃል (Center) እንዲፈነጥቅ የተደረገ
         function drawBackgroundRays() {
-            ctx.fillStyle = '#0a0b0e';
+            ctx.fillStyle = '#0b0c10';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.save();
-            ctx.translate(20, canvas.height - 20);
+            // ጨረሩን ወደ መሃል ማዛወር
+            ctx.translate(canvas.width / 2, canvas.height / 2);
 
-            const numRays = 28;
-            const rayAngle = Math.PI / 2 / numRays;
+            const numRays = 32;
+            const rayAngle = (Math.PI * 2) / numRays;
             
             for (let i = 0; i < numRays; i++) {
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
-                ctx.arc(0, 0, 500, -i * 2 * rayAngle, -(i * 2 + 1) * rayAngle, true);
+                ctx.arc(0, 0, 400, i * rayAngle, (i + 1) * rayAngle);
                 ctx.lineTo(0, 0);
-                ctx.fillStyle = i % 2 === 0 ? '#11141d' : '#080a0e';
+                ctx.fillStyle = i % 2 === 0 ? '#12151e' : '#080a0f';
                 ctx.fill();
             }
             ctx.restore();
 
-            // የጎንና የታችኛው ነጠብጣብ መስመሮች (Axis Dots)
-            ctx.fillStyle = '#2c2d30';
-            for (let x = 30; x < canvas.width; x += 18) {
+            // የጎንና የታችኛው መለያ ነጠብጣቦች
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            for (let x = 25; x < canvas.width; x += 15) {
                 ctx.beginPath();
-                ctx.arc(x, canvas.height - 15, 1.5, 0, Math.PI * 2);
+                ctx.arc(x, canvas.height - 15, 1, 0, Math.PI * 2);
                 ctx.fill();
             }
-            for (let y = 15; y < canvas.height - 15; y += 18) {
+            for (let y = 15; y < canvas.height - 15; y += 15) {
                 ctx.beginPath();
-                ctx.arc(20, y, 1.5, 0, Math.PI * 2);
+                ctx.arc(20, y, 1, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        // 🔴 ዋናውን እውነተኛ አውሮፕላን መሳያ
+        // 🔴 ዋናው ቀይ አውሮፕላን
         function drawRedPlane(x, y) {
             ctx.save();
             ctx.translate(x, y);
-            ctx.rotate(-0.08);
+            ctx.rotate(-0.05);
 
             ctx.fillStyle = '#cb0130';
             ctx.strokeStyle = '#ef1c4f';
             ctx.lineWidth = 1.5;
             
-            // የሰውነት አካል ቅርጽ
             ctx.beginPath();
             ctx.moveTo(22, 0);
             ctx.quadraticCurveTo(12, -9, -15, -7);
@@ -374,7 +371,6 @@
             ctx.fill();
             ctx.stroke();
 
-            // ክንፎች
             ctx.beginPath();
             ctx.moveTo(2, -4); ctx.lineTo(10, -24); ctx.lineTo(3, -24); ctx.lineTo(-5, -4);
             ctx.fill(); ctx.stroke();
@@ -383,7 +379,6 @@
             ctx.moveTo(2, 4); ctx.lineTo(10, 24); ctx.lineTo(3, 24); ctx.lineTo(-5, 4);
             ctx.fill(); ctx.stroke();
 
-            // ፕሮፔለር
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 2;
             ctx.beginPath(); ctx.moveTo(24, -10); ctx.lineTo(24, 10); ctx.stroke();
@@ -396,14 +391,15 @@
             
             if (isFlightInProgress) {
                 let points = [];
+                // 📍 የመነሻ ቦታው ከግራ መስመር በትንሹ ከፍ እንዲል ተደርጓል (+35)
                 for (let i = 0; i <= flightTime; i++) {
                     let x = 25 + (i / 180) * (canvas.width - 65);
-                    let y = canvas.height - 25 - (Math.pow(i / 100, 2.3) * 24);
+                    let y = (canvas.height - 35) - (Math.pow(i / 100, 2.2) * 22);
                     points.push({x: x, y: y});
                 }
 
                 if (points.length > 1) {
-                    // የጀርባው ቀይ ጥላ
+                    // የጀርባው ጥላ መሙያ
                     ctx.beginPath();
                     ctx.moveTo(25, canvas.height - 20);
                     points.forEach(p => ctx.lineTo(p.x, p.y));
@@ -411,17 +407,17 @@
                     ctx.closePath();
                     
                     let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                    gradient.addColorStop(0, 'rgba(203, 1, 48, 0.3)');
+                    gradient.addColorStop(0, 'rgba(203, 1, 48, 0.35)');
                     gradient.addColorStop(1, 'rgba(203, 1, 48, 0.0)');
                     ctx.fillStyle = gradient;
                     ctx.fill();
 
-                    // ዋናው ቀይ ጥምዝ መስመር
+                    // ቀይ መስመር
                     ctx.beginPath();
                     ctx.moveTo(points[0].x, points[0].y);
                     points.forEach(p => ctx.lineTo(p.x, p.y));
                     ctx.strokeStyle = '#cb0130';
-                    ctx.lineWidth = 4;
+                    ctx.lineWidth = 4.5;
                     ctx.stroke();
                 }
 
@@ -491,7 +487,7 @@
                 }
             } else if (!isFlightInProgress && currentBet.status === 'waiting') {
                 currentBet.status = 'idle';
-                btn.childNodes[0].nodeValue = "Bet";
+                btn.childNodes[0].nodeValue = "BET";
                 sub.innerText = amt.toFixed(2) + " ETB";
                 btn.className = "bet-button";
             } else if (isFlightInProgress && currentBet.status === 'active') {
@@ -499,7 +495,7 @@
                 balance += winAmt;
                 balanceElement.innerText = balance.toFixed(2) + " ETB";
                 currentBet.status = 'idle';
-                btn.childNodes[0].nodeValue = "Bet";
+                btn.childNodes[0].nodeValue = "BET";
                 sub.innerText = amt.toFixed(2) + " ETB";
                 btn.className = "bet-button";
                 alert("አሸንፈዋል! +" + winAmt.toFixed(2) + " ETB");
@@ -533,7 +529,7 @@
                     let btn = document.getElementById('btn-' + id);
                     let sub = document.getElementById('sub-' + id);
                     let amt = document.getElementById('bet-amount-' + id).value;
-                    btn.childNodes[0].nodeValue = "Bet";
+                    btn.childNodes[0].nodeValue = "BET";
                     sub.innerText = parseFloat(amt).toFixed(2) + " ETB";
                     btn.className = "bet-button";
                 }
