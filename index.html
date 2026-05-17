@@ -141,11 +141,11 @@
         .sub-section h3 { font-size: 13px; color: #7a8b9e; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .list-item { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #1f2630; }
 
-        /* Updated Asset Gallery Grid for the 6 newly uploaded images */
-        .asset-gallery { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+        /* Updated Asset Gallery Grid to 9 columns for all uploaded images */
+        .asset-gallery { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; margin-top: 10px; }
         .asset-card { background: #111419; border: 1px solid #232a33; border-radius: 6px; padding: 2px; text-align: center; }
         .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(15%); transition: transform 0.2s, filter 0.2s; }
-        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.04); }
+        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.05); }
 
         /* Custom Toast Container */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; }
@@ -248,6 +248,9 @@
                 <div class="asset-card"><img src="1000002622.jpg" alt="Asset 22"></div>
                 <div class="asset-card"><img src="1000002623.jpg" alt="Asset 23"></div>
                 <div class="asset-card"><img src="1000002624.jpg" alt="Asset 24"></div>
+                <div class="asset-card"><img src="1000002625.jpg" alt="Asset 25"></div>
+                <div class="asset-card"><img src="1000002626.jpg" alt="Asset 26"></div>
+                <div class="asset-card"><img src="1000002627.jpg" alt="Asset 27"></div>
             </div>
         </div>
 
@@ -285,12 +288,12 @@
         let balance = parseFloat(localStorage.getItem(storageKey)) || 1000.00;
         let pastResults = JSON.parse(localStorage.getItem("aviator_history_pro")) || [1.32, 4.50, 1.05, 12.80, 2.10, 1.85];
         
-            document.getElementById('balance-amount').innerText = balance.toFixed(2);
+        document.getElementById('balance-amount').innerText = balance.toFixed(2);
 
         function updateBalance(amount) {
             balance += amount;
             localStorage.setItem(storageKey, balance);
-                document.getElementById('balance-amount').innerText = balance.toFixed(2);
+            document.getElementById('balance-amount').innerText = balance.toFixed(2);
         }
 
         const canvas = document.getElementById('gameCanvas');
@@ -311,14 +314,17 @@
         let isPlaneLoaded = false;
         planeImg.onload = () => { isPlaneLoaded = true; };
 
-        // Updated Structural Sources Array for the 6 latest uploaded image assets
+        // Updated Array for all 9 uploaded image assets
         const assetSrcs = [
             "1000002619.jpg", 
             "1000002620.jpg", 
             "1000002621.jpg", 
             "1000002622.jpg", 
             "1000002623.jpg", 
-            "1000002624.jpg"
+            "1000002624.jpg",
+            "1000002625.jpg",
+            "1000002626.jpg",
+            "1000002627.jpg"
         ];
         const gameAssets = [];
         assetSrcs.forEach(src => {
@@ -338,11 +344,11 @@
 
         // Particles system for background floating structural images
         let backgroundParticles = [];
-        for(let i=0; i<6; i++) { 
+        for(let i=0; i<9; i++) { 
             backgroundParticles.push({ 
                 x: Math.random() * 500, 
                 y: Math.random() * 150, 
-                speed: 0.35 + Math.random() * 0.45 
+                speed: 0.32 + Math.random() * 0.43 
             }); 
         }
 
@@ -352,7 +358,7 @@
             toast.className = 'toast';
             toast.innerText = message;
             container.appendChild(toast);
-                setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2700);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2700);
         }
 
         function renderHistoryRibbon() {
@@ -502,7 +508,7 @@
                 ctx.beginPath(); ctx.moveTo(15, 0); ctx.quadraticCurveTo(5, -5, -10, -3); ctx.lineTo(-14, 0); ctx.lineTo(-10, 5); ctx.closePath(); ctx.fill();
             }
 
-            // Flame Vector Propulsion
+            // Flame Propulsion Vector
             ctx.beginPath();
             ctx.moveTo(-28, 0);
             ctx.lineTo(-45, -6);
@@ -523,13 +529,13 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Floating Translucent Structural Images Layers
+            // Floating Translucent Structural Images Layers (Iterating over 9 images)
             backgroundParticles.forEach((p, index) => {
                 ctx.save();
                 let assetIndex = index % gameAssets.length;
                 if (gameAssets[assetIndex] && gameAssets[assetIndex].complete) {
-                    ctx.globalAlpha = 0.14; // Premium faint watermark style motion
-                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 30, 30);
+                    ctx.globalAlpha = 0.13; // Premium subtle motion watermark style
+                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 28, 28);
                 } else {
                     ctx.beginPath(); ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
                     ctx.fillStyle = "rgba(40, 50, 68, 0.08)"; ctx.fill();
@@ -571,7 +577,7 @@
                 ctx.stroke();
                 ctx.shadowBlur = 0; 
 
-                // Locking Physics Transform Coordinates
+                // Locking Transform Coordinates
                 let jetX = 60 + flightProgress;
                 let jetY = (canvas.height - 50) - Math.pow(flightProgress * 0.08, 1.4);
                 
