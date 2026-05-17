@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalgames Aviator Premium Edition</title>
+    <title>Kalgames Aviator Pro Real-Edition</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -45,7 +45,7 @@
             border: 1px solid #2d303a; 
         }
 
-        /* History Bar */
+        /* Multiplier History Bar */
         #history-bar { 
             display: flex; 
             gap: 6px; 
@@ -97,7 +97,7 @@
             z-index: 10; 
         }
 
-        /* 🔴 Flew Away Notification Banner */
+        /* Flew Away Notification Banner */
         #flew-away-banner {
             display: none;
             position: absolute;
@@ -115,7 +115,7 @@
         .flew-title { font-size: 13px; font-weight: bold; color: rgba(255,255,255,0.8); text-transform: uppercase; margin-bottom: 2px; }
         .flew-val { font-size: 34px; font-weight: 900; }
 
-        /* ⏳ ፎቶው ላይ ያለው እውነተኛው WAITING FOR NEXT ROUND ማሳያ ክፍል */
+        /* Waiting Container with Progress Line */
         #waiting-container {
             display: none;
             position: absolute;
@@ -148,29 +148,7 @@
             border-radius: 2px;
         }
 
-        /* Dashboard Navigation Tabs */
-        .mid-nav-tabs {
-            width: 96%;
-            max-width: 370px;
-            background: #141519;
-            display: flex;
-            justify-content: space-around;
-            padding: 4px;
-            border-radius: 20px;
-            margin-top: 8px;
-            border: 1px solid #1c1d22;
-        }
-        .mid-tab {
-            color: #9a9da4;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 5px 16px;
-            border-radius: 15px;
-            cursor: pointer;
-        }
-        .mid-tab.active { color: #fff; background: #2c2d34; }
-
-        /* Betting Section */
+        /* Input Dashboard Panel Configurator */
         .bet-area { 
             width: 96%; 
             max-width: 370px; 
@@ -188,21 +166,52 @@
 
         .panel-header-tabs {
             display: flex;
-            justify-content: center;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 8px;
         }
+        .tab-group { display: flex; gap: 6px; background: #141519; padding: 2px; border-radius: 12px; }
         .sub-tab {
             font-size: 11px;
             color: #757881;
             font-weight: bold;
-            padding: 2px 14px;
+            padding: 3px 14px;
             border-radius: 10px;
             cursor: pointer;
-            background: #141519;
-            border: 1px solid #1c1d22;
         }
-        .sub-tab.active { color: #fff; background: #2ccb4a; border-color: #2ccb4a; }
+        .sub-tab.active { color: #fff; background: #2c2d34; }
+
+        /* 🔄 አዲሱ የ Auto Cashout ማብሪያ ቶግል ስዊች (Toggle Switch) */
+        .auto-cashout-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #9a9da4;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 30px;
+            height: 16px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #232429; transition: .3s; border-radius: 16px; border: 1px solid #2d303a;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 10px; width: 10px; left: 2px; bottom: 2px;
+            background-color: #9a9da4; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #2ccb4a; }
+        input:checked + .slider:before { transform: translateX(14px); background-color: #fff; }
+
+        .auto-val-input {
+            width: 42px; background: #101115; border: 1px solid #2d303a; color: #2ccb4a;
+            font-size: 11px; font-weight: bold; text-align: center; border-radius: 4px; padding: 1px; outline: none;
+        }
 
         .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .controls-left { display: flex; flex-direction: column; gap: 5px; }
@@ -223,7 +232,7 @@
         }
         .amount-input { 
             background: none; border: none; color: #fff; font-size: 14px; 
-            font-weight: bold; width: 50px; text-align: center; outline: none; 
+            font-weight: bold; width: 45px; text-align: center; outline: none; 
         }
         .quick-math-actions { display: flex; gap: 2px; margin-left: auto; }
         .math-btn {
@@ -248,6 +257,33 @@
         
         .bet-button.waiting { background: #e67e22; box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3); }
         .bet-button.cashout { background: #cb0130; box-shadow: 0 4px 10px rgba(203, 1, 48, 0.3); }
+
+        /* Central Tabs */
+        .mid-nav-tabs {
+            width: 96%;
+            max-width: 370px;
+            background: #141519;
+            display: flex;
+            justify-content: space-around;
+            padding: 4px;
+            border-radius: 20px;
+            margin-top: 12px;
+            border: 1px solid #1c1d22;
+        }
+        .mid-tab { color: #9a9da4; font-size: 11px; font-weight: bold; padding: 5px 16px; border-radius: 15px; cursor: pointer; }
+        .mid-tab.active { color: #fff; background: #2c2d34; }
+
+        /* 📊 አዲሱ የተጫዋቾች ውርርድ ዝርዝር (Live Bets Table Board) */
+        .live-bets-container {
+            width: 96%; max-width: 370px; background: #141519; margin-top: 6px;
+            border-radius: 8px; padding: 8px; border: 1px solid #1c1d22; margin-bottom: 20px;
+        }
+        .bets-summary-header { display: flex; justify-content: space-between; font-size: 11px; color: #9a9da4; margin-bottom: 6px; font-weight: bold; }
+        .bets-list-table { width: 100%; border-collapse: collapse; }
+        .bets-list-table th { text-align: left; font-size: 10px; color: #757881; padding-bottom: 4px; border-bottom: 1px solid #1c1d22; }
+        .bets-list-table td { font-size: 11px; padding: 5px 0; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .user-id-col { color: #9a9da4; font-weight: 500; }
+        .user-mult-badge { background: rgba(44, 203, 74, 0.15); color: #2ccb4a; padding: 1px 5px; border-radius: 6px; font-weight: bold; font-size: 10px; }
     </style>
 </head>
 <body>
@@ -276,17 +312,21 @@
         </div>
     </div>
 
-    <div class="mid-nav-tabs">
-        <div class="mid-tab active">All Bets</div>
-        <div class="mid-tab">My Bets</div>
-        <div class="mid-tab">Top</div>
-    </div>
-
     <div class="bet-area">
         <div class="bet-panel">
             <div class="panel-header-tabs">
-                <div class="sub-tab active">Bet</div>
-                <div class="sub-tab">Auto</div>
+                <div class="tab-group">
+                    <div class="sub-tab active">Bet</div>
+                    <div class="sub-tab">Auto</div>
+                </div>
+                <div class="auto-cashout-container">
+                    <span>Auto Cashout</span>
+                    <label class="switch">
+                        <input type="checkbox" id="auto-cash-check-1">
+                        <span class="slider"></span>
+                    </label>
+                    <input type="text" class="auto-val-input" id="auto-cash-val-1" value="2.00">
+                </div>
             </div>
             <div class="panel-grid">
                 <div class="controls-left">
@@ -314,8 +354,18 @@
 
         <div class="bet-panel">
             <div class="panel-header-tabs">
-                <div class="sub-tab active">Bet</div>
-                <div class="sub-tab">Auto</div>
+                <div class="tab-group">
+                    <div class="sub-tab active">Bet</div>
+                    <div class="sub-tab">Auto</div>
+                </div>
+                <div class="auto-cashout-container">
+                    <span>Auto Cashout</span>
+                    <label class="switch">
+                        <input type="checkbox" id="auto-cash-check-2">
+                        <span class="slider"></span>
+                    </label>
+                    <input type="text" class="auto-val-input" id="auto-cash-val-2" value="2.00">
+                </div>
             </div>
             <div class="panel-grid">
                 <div class="controls-left">
@@ -342,6 +392,31 @@
         </div>
     </div>
 
+    <div class="mid-nav-tabs">
+        <div class="mid-tab active">All Bets</div>
+        <div class="mid-tab">My Bets</div>
+        <div class="mid-tab">Top</div>
+    </div>
+
+    <div class="live-bets-container">
+        <div class="bets-summary-header">
+            <span>All Bets: <span style="color:#2ccb4a;" id="total-bets-count">18</span></span>
+            <span style="color: #757881;">Total Bet: <span style="color:#fff;">1,420 ETB</span></span>
+        </div>
+        <table class="bets-list-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Bet (ETB)</th>
+                    <th>Mult.</th>
+                    <th>Cash out</th>
+                </tr>
+            </thead>
+            <tbody id="bets-rows-container">
+                </tbody>
+        </div>
+    </div>
+
     <script>
         const balanceElement = document.getElementById('player-balance');
         const historyContainer = document.getElementById('history-bar');
@@ -352,6 +427,7 @@
         const flewValText = document.getElementById('flew-val-text');
         const waitingContainer = document.getElementById('waiting-container');
         const progressBarFill = document.getElementById('progress-bar-fill-id');
+        const betsRowsContainer = document.getElementById('bets-rows-container');
 
         let balance = 1000.00;
         let isFlightInProgress = false;
@@ -362,8 +438,11 @@
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
 
-        const pastResults = [1.24, 2.80, 1.05, 11.12, 1.95, 4.21, 24.50];
+        const pastResults = [1.32, 5.40, 1.02, 18.25, 2.11, 1.76, 31.40];
         
+        // 📊 የውሸት ተጫዋቾች ስም ዝርዝር ለታችኛው ቦርድ
+        const fakeUserNames = ["k***l", "a***m", "b***e", "t***f", "y***ነ", "m***k", "g***d", "s***a", "j***o", "r***u"];
+
         function renderHistory() {
             historyContainer.innerHTML = '';
             pastResults.slice(-7).reverse().forEach(res => {
@@ -375,6 +454,46 @@
                 item.innerText = res.toFixed(2) + 'x';
                 historyContainer.appendChild(item);
             });
+        }
+
+        // 📊 ተጫዋቾችን በየዙሩ በራንደም ማመንጫ ሰንጠረዥ
+        function generateLiveBetsBoard() {
+            betsRowsContainer.innerHTML = '';
+            let count = 12 + Math.floor(Math.random() * 10);
+            document.getElementById('total-bets-count').innerText = count;
+
+            for(let i=0; i<count; i++) {
+                let name = fakeUserNames[Math.floor(Math.random() * fakeUserNames.length)] + Math.floor(Math.random()*99);
+                let amt = [4, 10, 20, 40, 100, 200][Math.floor(Math.random()*6)];
+                
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="user-id-col">👤 ${name}</td>
+                    <td>${amt}.00</td>
+                    <td><span class="user-mult-badge" id="user-m-${i}">-</span></td>
+                    <td id="user-c-${i}">-</td>
+                `;
+                betsRowsContainer.appendChild(row);
+            }
+        }
+
+        // 📊 በረራው ሲቀጥል የሌሎች ሰዎችን ውጤት በዘፈቀደ Cashout እንዲያደርጉ ማድረጊያ
+        function updateLiveBetsBoardState() {
+            let rowsCount = betsRowsContainer.children.length;
+            for(let i=0; i<rowsCount; i++) {
+                let mBadge = document.getElementById(`user-m-${i}`);
+                let cCell = document.getElementById(`user-c-${i}`);
+                if(mBadge && mBadge.innerText === "-" && Math.random() < 0.04) {
+                    let randCash = (1.1 + Math.random() * (currentMultiplier - 1.1)).toFixed(2);
+                    if (parseFloat(randCash) <= parseFloat(currentMultiplier)) {
+                        mBadge.innerText = randCash + "x";
+                        let betAmt = parseFloat(betsRowsContainer.children[i].children[1].innerText);
+                        cCell.innerText = (betAmt * randCash).toFixed(1) + " ETB";
+                        cCell.style.color = "#2ccb4a";
+                        cCell.style.fontWeight = "bold";
+                    }
+                }
+            }
         }
 
         function drawBackground() {
@@ -431,6 +550,7 @@
                 let endX = startX + flightProgress * (canvas.width - 65);
                 let endY = startY - Math.pow(flightProgress, 2.1) * (canvas.height - 65);
 
+                // 🔄 አውሮፕላኑ ሲበር ከበስተጀርባው የሚፈጠረው ቀይ የጭስ ጥላ (Glow Gradient Effect)
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 let cpX = startX + (endX - startX) * 0.62;
@@ -440,7 +560,8 @@
                 ctx.closePath();
 
                 let fillGrad = ctx.createLinearGradient(0, endY, 0, startY);
-                fillGrad.addColorStop(0, 'rgba(203, 1, 48, 0.22)');
+                fillGrad.addColorStop(0, 'rgba(203, 1, 48, 0.28)'); // ቀይ የጭስ ጥላ
+                fillGrad.addColorStop(0.5, 'rgba(203, 1, 48, 0.08)');
                 fillGrad.addColorStop(1, 'rgba(203, 1, 48, 0.0)');
                 ctx.fillStyle = fillGrad;
                 ctx.fill();
@@ -449,18 +570,19 @@
                 ctx.moveTo(startX, startY);
                 ctx.quadraticCurveTo(cpX, cpY, endX, endY);
                 ctx.strokeStyle = '#e10237';
-                ctx.lineWidth = 2.2;
+                ctx.lineWidth = 2.8;
                 ctx.stroke();
 
                 drawAviatorJet(endX, endY);
             }
         }
 
-        // ⏳ አዲሱ ዙር ከመጀመሩ በፊት ቀዩ መስመር የሚሞላበት አኒሜሽን
         function startWaitingPeriod() {
             flewBanner.style.display = "none";
             multiplierOverlay.style.display = "none";
             waitingContainer.style.display = "block";
+            
+            generateLiveBetsBoard(); // አዲስ የተጫዋቾች ቦርድ ማዘጋጀት
             
             let loadProgress = 0;
             progressBarFill.style.width = "0%";
@@ -474,7 +596,7 @@
                     waitingContainer.style.display = "none";
                     startNewRound();
                 }
-            }, 100); // 5 ሰከንድ ጠቅላላ መሙያ ጊዜ
+            }, 100); 
         }
 
         function startNewRound() {
@@ -483,8 +605,8 @@
             currentMultiplier = 1.00;
             
             let rand = Math.random();
-            if (rand < 0.07) crashPoint = 1.00; 
-            else crashPoint = (1 + 9 * Math.random()).toFixed(2); 
+            if (rand < 0.08) crashPoint = 1.00; 
+            else crashPoint = (1 + 12 * Math.random()).toFixed(2); 
 
             isFlightInProgress = true;
             multiplierOverlay.style.color = "#fff";
@@ -495,16 +617,33 @@
 
         function flightSequence() {
             if (currentMultiplier < crashPoint && isFlightInProgress) {
-                flightProgress += 0.0032; 
+                flightProgress += 0.0030; 
                 currentMultiplier = (1.00 + Math.pow(flightProgress * 4, 2.1)).toFixed(2);
                 multiplierOverlay.innerText = currentMultiplier + "x";
                 
+                checkAutoCashouts(); // የ Auto Cashout ማረጋገጫ
                 updateCashoutLabels();
+                updateLiveBetsBoardState(); // የታችኛውን ተጫዋቾች ስቴት ማዘመን
                 drawGame();
                 requestAnimationFrame(flightSequence);
             } else if (isFlightInProgress) {
                 endRound();
             }
+        }
+
+        // 🔄 Auto Cashout ማብሪያው በርቶ ከሆነ በራሱ እንዲያወጣ ማድረጊያ ዘዴ
+        function checkAutoCashouts() {
+            [1, 2].forEach(id => {
+                let currentBet = id === 1 ? bet1 : bet2;
+                let autoCheck = document.getElementById('auto-cash-check-' + id).checked;
+                let autoVal = parseFloat(document.getElementById('auto-cash-val-' + id).value) || 2.00;
+
+                if (isFlightInProgress && currentBet.status === 'active' && autoCheck) {
+                    if (parseFloat(currentMultiplier) >= autoVal) {
+                        triggerCashoutSuccess(id);
+                    }
+                }
+            });
         }
 
         function endRound() {
@@ -518,7 +657,6 @@
             renderHistory();
             resetPanels();
             
-            // ከ 3 ሰከንድ ቀይ ባነር በኋላ የፕሮግረስ ባሩን መጠባበቂያ ያስጀምራል
             setTimeout(startWaitingPeriod, 3000);
         }
 
@@ -542,15 +680,24 @@
                 sub.innerText = amt.toFixed(2) + " ETB";
                 btn.className = "bet-button";
             } else if (isFlightInProgress && currentBet.status === 'active') {
-                let winAmt = currentBet.amount * currentMultiplier;
-                balance += winAmt;
-                balanceElement.innerText = balance.toFixed(2) + " ETB";
-                currentBet.status = 'idle';
-                btn.childNodes[0].nodeValue = "BET";
-                sub.innerText = amt.toFixed(2) + " ETB";
-                btn.className = "bet-button";
-                alert("እንኳን ደስ አሰኞት! +" + winAmt.toFixed(2) + " ETB አሸንፈዋል!");
+                triggerCashoutSuccess(id);
             }
+        }
+
+        function triggerCashoutSuccess(id) {
+            let currentBet = id === 1 ? bet1 : bet2;
+            let btn = document.getElementById('btn-' + id);
+            let sub = document.getElementById('sub-' + id);
+            let amt = parseInt(document.getElementById('bet-amount-' + id).value);
+
+            let winAmt = currentBet.amount * currentMultiplier;
+            balance += winAmt;
+            balanceElement.innerText = balance.toFixed(2) + " ETB";
+            currentBet.status = 'idle';
+            btn.childNodes[0].nodeValue = "BET";
+            sub.innerText = amt.toFixed(2) + " ETB";
+            btn.className = "bet-button";
+            alert("እንኳን ደስ አሰኞት! +" + winAmt.toFixed(2) + " ETB በ " + currentMultiplier + "x አሸንፈዋል!");
         }
 
         function handleRoundStartBets() {
@@ -621,7 +768,7 @@
         window.onload = function() {
             renderHistory();
             drawGame();
-            startWaitingPeriod(); // በመጠባበቂያ ፕሮግረስ ባር ጨዋታውን ያስጀምራል
+            startWaitingPeriod();
         }
     </script>
 </body>
