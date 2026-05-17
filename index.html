@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalgames Aviator Pro - Combined Edition</title>
+    <title>Kalgames Aviator Pro - Ultimate Edition</title>
     <style>
         /* Base & Reset Styles */
         * {
@@ -22,7 +22,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            padding-bottom: 60px; /* Missing Footer Safe Space */
+            padding-bottom: 60px;
         }
 
         /* Loading Splash Screen */
@@ -101,7 +101,7 @@
         .badge-mid { background: rgba(155, 89, 182, 0.15); color: #9b59b6; border: 1px solid rgba(155, 89, 182, 0.3); }
         .badge-high { background: rgba(193, 70, 227, 0.15); color: #c146e3; border: 1px solid rgba(193, 70, 227, 0.4); }
 
-        /* Dual Betting Panel Config */
+        /* Dual Betting Panels */
         .bet-area-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 5px; }
         @media (min-width: 600px) { .bet-area-grid { grid-template-columns: 1fr 1fr; } }
         
@@ -111,7 +111,7 @@
         .tab-btn { background: none; border: none; color: #7a8b9e; font-size: 11px; font-weight: bold; cursor: pointer; padding: 4px 12px; border-radius: 8px; }
         .tab-btn.active { color: #fff; background: #232a33; }
 
-        /* Auto Controls Toggle Switch */
+        /* Toggle Switches */
         .toggle-container { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #7a8b9e; }
         .switch { position: relative; display: inline-block; width: 30px; height: 16px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -135,18 +135,24 @@
         .main-bet-btn.waiting { background: #e67e22; box-shadow: 0 4px 10px rgba(230,126,34,0.2); }
         .main-bet-btn.running { background: #cb0130; box-shadow: 0 4px 10px rgba(203,1,48,0.2); }
 
-        /* Sidebar & Tables */
+        /* Sidebar Panels */
         .sidebar { display: flex; flex-direction: column; gap: 15px; }
         .sub-section { background: #181c22; border-radius: 12px; padding: 12px; border: 1px solid #232a33; max-height: 220px; overflow-y: auto; }
         .sub-section h3 { font-size: 13px; color: #7a8b9e; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .list-item { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #1f2630; }
 
-        /* Custom Toast Container Area */
+        /* Updated Asset Gallery Grid for the 6 new images */
+        .asset-gallery { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+        .asset-card { background: #111419; border: 1px solid #232a33; border-radius: 6px; padding: 2px; text-align: center; }
+        .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(20%); transition: transform 0.2s, filter 0.2s; }
+        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.03); }
+
+        /* Custom Toast Container */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; }
         .toast { background: rgba(44, 203, 74, 0.95); color: #fff; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); margin-bottom: 8px; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Real Bottom Navigation Bar */
+        /* Navigation Menu */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #141921; border-top: 1px solid #232a33; display: flex; justify-content: space-around; padding: 8px 0; z-index: 999; }
         .nav-item { color: #7a8b9e; font-size: 11px; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .nav-item.active { color: #cb0130; }
@@ -234,6 +240,15 @@
                     </div>
                 </div>
             </div>
+
+            <div class="asset-gallery">
+                <div class="asset-card"><img src="1000002613.jpg" alt="Asset 13"></div>
+                <div class="asset-card"><img src="1000002614.jpg" alt="Asset 14"></div>
+                <div class="asset-card"><img src="1000002615.jpg" alt="Asset 15"></div>
+                <div class="asset-card"><img src="1000002616.jpg" alt="Asset 16"></div>
+                <div class="asset-card"><img src="1000002617.jpg" alt="Asset 17"></div>
+                <div class="asset-card"><img src="1000002618.jpg" alt="Asset 18"></div>
+            </div>
         </div>
 
         <div class="sidebar">
@@ -265,7 +280,7 @@
             }, 2500);
         });
 
-        // Local Storage
+        // Local Storage Config
         const storageKey = "aviator_balance_pro";
         let balance = parseFloat(localStorage.getItem(storageKey)) || 1000.00;
         let pastResults = JSON.parse(localStorage.getItem("aviator_history_pro")) || [1.32, 4.50, 1.05, 12.80, 2.10, 1.85];
@@ -290,6 +305,28 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
+        // Jet Asset Loader
+        const planeImg = new Image();
+        planeImg.src = "https://i.imgur.com/7Qp9Z8K.png";
+        let isPlaneLoaded = false;
+        planeImg.onload = () => { isPlaneLoaded = true; };
+
+        // Updated Array for the 6 newly uploaded image assets
+        const assetSrcs = [
+            "1000002613.jpg", 
+            "1000002614.jpg", 
+            "1000002615.jpg", 
+            "1000002616.jpg", 
+            "1000002617.jpg", 
+            "1000002618.jpg"
+        ];
+        const gameAssets = [];
+        assetSrcs.forEach(src => {
+            let img = new Image();
+            img.src = src;
+            gameAssets.push(img);
+        });
+
         // Game Core Engine Variables
         let gameState = "waiting"; 
         let multiplier = 1.00;
@@ -299,8 +336,15 @@
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
 
-        let clouds = [];
-        for(let i=0; i<6; i++) { clouds.push({ x: Math.random() * 400, y: Math.random() * 120, speed: 0.4 + Math.random() * 0.5 }); }
+        // Particles system for background floating images
+        let backgroundParticles = [];
+        for(let i=0; i<6; i++) { 
+            backgroundParticles.push({ 
+                x: Math.random() * 500, 
+                y: Math.random() * 150, 
+                speed: 0.3 + Math.random() * 0.4 
+            }); 
+        }
 
         function showToast(message) {
             const container = document.getElementById('toast-container');
@@ -439,35 +483,62 @@
             }, 3000);
         }
 
+        // DrawJet Core Function
         function drawJet(x, y) {
             ctx.save();
             ctx.translate(x, y);
+
             let angle = -0.15 + (flightProgress * 0.0006);
             ctx.rotate(angle);
 
-            ctx.fillStyle = '#cb0130';
+            // Glow Effect
+            ctx.shadowColor = "#ff0000";
+            ctx.shadowBlur = 20;
+
+            if (isPlaneLoaded) {
+                ctx.drawImage(planeImg, -30, -20, 60, 40);
+            } else {
+                ctx.fillStyle = '#cb0130';
+                ctx.beginPath(); ctx.moveTo(15, 0); ctx.quadraticCurveTo(5, -5, -10, -3); ctx.lineTo(-14, 0); ctx.lineTo(-10, 5); ctx.closePath(); ctx.fill();
+            }
+
+            // Engine flame design
             ctx.beginPath();
-            ctx.moveTo(15, 0);
-            ctx.quadraticCurveTo(5, -5, -10, -3);
-            ctx.lineTo(-14, -7); ctx.lineTo(-16, -7); ctx.lineTo(-14, 0); ctx.lineTo(-16, 7); ctx.lineTo(-14, 7);
-            ctx.quadraticCurveTo(-10, 5, 15, 0);
+            ctx.moveTo(-28, 0);
+            ctx.lineTo(-45, -6);
+            ctx.lineTo(-45, 6);
+            ctx.closePath();
+
+            let flame = ctx.createLinearGradient(-45, 0, -28, 0);
+            flame.addColorStop(0, "#ff9900");
+            flame.addColorStop(1, "#ff0000");
+
+            ctx.fillStyle = flame;
             ctx.fill();
 
-            ctx.fillStyle = '#ffdd00';
-            ctx.fillRect(-20, -2, 5, 4);
             ctx.restore();
         }
 
-        // Integrated Rendering Loop (Flight Path & Engine Box)
+        // Main Draw Interval Loop Frame Engine
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Cloud Background
-            clouds.forEach(c => {
-                ctx.beginPath(); ctx.arc(c.x, c.y, 15, 0, Math.PI * 2); ctx.arc(c.x+10, c.y-8, 18, 0, Math.PI * 2); ctx.arc(c.x+20, c.y, 15, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(40, 50, 68, 0.12)"; ctx.fill();
-                c.x -= gameState === "running" ? c.speed * (multiplier * 0.4) : c.speed * 0.15;
-                if(c.x < -50) c.x = canvas.width + 20;
+            // Floating Background Asset Particles Layer (Using the new 6 images)
+            backgroundParticles.forEach((p, index) => {
+                ctx.save();
+                let assetIndex = index % gameAssets.length;
+                if (gameAssets[assetIndex] && gameAssets[assetIndex].complete) {
+                    ctx.globalAlpha = 0.12; // Translucent floating effect
+                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 28, 28);
+                } else {
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
+                    ctx.fillStyle = "rgba(40, 50, 68, 0.1)"; ctx.fill();
+                }
+                ctx.restore();
+
+                // Dynamic speed adjustments based on game status
+                p.x -= gameState === "running" ? p.speed * (multiplier * 0.4) : p.speed * 0.15;
+                if(p.x < -40) p.x = canvas.width + 30;
             });
 
             if (gameState === "running") {
@@ -482,14 +553,13 @@
                 if (bet1.status === 'active') document.getElementById('sub-1').innerText = (bet1.amount * multiplier).toFixed(2) + " ETB";
                 if (bet2.status === 'active') document.getElementById('sub-2').innerText = (bet2.amount * multiplier).toFixed(2) + " ETB";
 
-                // New Flight Path Logic Integration
+                // Flight Path Curve Grid
                 ctx.beginPath();
                 ctx.moveTo(60, canvas.height - 50);
 
                 for (let i = 0; i < flightProgress; i++) {
                     let px = 60 + i;
                     let py = (canvas.height - 50) - Math.pow(i * 0.08, 1.4);
-                    // Canvas ገደብ እንዳያልፍ መቆጣጠሪያ
                     if (px < canvas.width * 0.85 && py > canvas.height * 0.15) {
                         ctx.lineTo(px, py);
                     }
@@ -500,13 +570,12 @@
                 ctx.shadowColor = "#cb0130";
                 ctx.shadowBlur = 10;
                 ctx.stroke();
-                ctx.shadowBlur = 0; // Reset Shadow Blur
+                ctx.shadowBlur = 0; 
 
-                // Jet Position Link
+                // Jet Vector Lock Coordinates
                 let jetX = 60 + flightProgress;
                 let jetY = (canvas.height - 50) - Math.pow(flightProgress * 0.08, 1.4);
                 
-                // አውሮፕላኑ ከካንቫሱ እንዳይጠፋ መቆለፊያ
                 jetX = Math.min(jetX, canvas.width * 0.85);
                 jetY = Math.max(jetY, canvas.height * 0.15);
 
@@ -520,7 +589,7 @@
             requestAnimationFrame(draw);
         }
 
-        // Integrated Live Bets Board 
+        // Live Bets Board Updates
         function updateLiveBoard() {
             const board = document.getElementById('live-bets-board');
             let fakeTotal = 0;
@@ -545,14 +614,8 @@
             document.getElementById('total-bets-display').innerText = fakeTotal + " ETB";
         }
 
-        // Integrated Room Chat
-        const chats = [
-            "🔥 Nice win!",
-            "🚀 Going high today",
-            "😅 Crash at 1.00x",
-            "💰 Big cashout!",
-            "👀 Watch this round"
-        ];
+        // Live Chat Messages
+        const chats = ["🔥 Nice win!", "🚀 Going high today", "😅 Crash at 1.00x", "💰 Big cashout!", "👀 Watch this round"];
 
         function updateChat() {
             const board = document.getElementById('chat-board');
@@ -589,7 +652,7 @@
             }
         }
 
-        // Engine Triggers
+        // Initial Engine Loops
         renderHistoryRibbon();
         updateLiveBoard();
         updateChat();
