@@ -1,65 +1,302 @@
+Aviator Pro - Fixed & Updated Version
+
+ይህ ፋይል ከአንተ original code የተስተካከለ እና የተዘመነ version ነው።
+
+የተስተካከሉ ችግኞች
+
+childNodes error ተወግዷል
+
+canvas resize issue ተስተካክሏል
+
+multiplier freeze bug ተስተካክሏል
+
+buttons state bug ተስተካክሏል
+
+game loop smoother ተደርጓል
+
+waiting/running/crash transitions ተስተካክለዋል
+
+mobile support ተሻሽሏል
+
+
+አጠቃቀም
+
+1. index.html ፍጠር
+
+
+2. ይህን ሙሉ code ጫን
+
+
+3. Save አድርግ
+
+
+4. Chrome ውስጥ ክፈት
+
+
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Aviator Fixed</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalgames Aviator Pro</title>
 <style>
-body { background:#0b0e11; color:white; font-family:Arial; text-align:center; }
-canvas { background:#141921; display:block; margin:20px auto; border:1px solid #333; }
-button { padding:10px 20px; font-size:16px; }
+body{
+margin:0;
+background:#0b0e11;
+font-family:Arial,sans-serif;
+color:white;
+overflow:hidden;
+}
+.top{
+padding:15px;
+background:#11161d;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.balance{
+background:#1b222c;
+padding:8px 15px;
+border-radius:20px;
+color:#2ccb4a;
+font-weight:bold;
+}
+.game{
+position:relative;
+height:300px;
+background:#141921;
+margin:10px;
+border-radius:10px;
+overflow:hidden;
+}
+canvas{
+width:100%;
+height:100%;
+}
+.multiplier{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:48px;
+font-weight:bold;
+text-shadow:0 0 15px #cb0130;
+}
+.controls{
+padding:15px;
+display:flex;
+gap:10px;
+}
+input{
+flex:1;
+padding:12px;
+font-size:18px;
+background:#1b222c;
+border:none;
+color:white;
+border-radius:8px;
+}
+button{
+flex:1;
+padding:12px;
+font-size:18px;
+font-weight:bold;
+background:#2ccb4a;
+border:none;
+border-radius:8px;
+color:white;
+}
+.history{
+display:flex;
+gap:5px;
+padding:10px;
+overflow:auto;
+}
+.badge{
+padding:5px 10px;
+background:#1b222c;
+border-radius:20px;
+font-size:12px;
+}
 </style>
 </head>
 <body>
 
-<h2>🚀 Aviator Fixed Test</h2>
-<div id="mult">1.00x</div>
-<canvas id="c" width="400" height="200"></canvas>
-<br>
-<button onclick="startGame()">Start</button>
+<div class="top">
+<div>🚀 Kalgames Aviator</div>
+<div class="balance"><span id="bal">1000.00</span> ETB</div>
+</div>
+
+<div class="history" id="history"></div>
+
+<div class="game">
+<div class="multiplier" id="multiplier">Waiting...</div>
+<canvas id="canvas"></canvas>
+</div>
+
+<div class="controls">
+<input type="number" id="bet" value="50">
+<button id="betBtn">BET</button>
+</div>
 
 <script>
-let canvas = document.getElementById("c");
-let ctx = canvas.getContext("2d");
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
 
-let mult = 1;
-let running = false;
-let x = 20;
-let y = 180;
+function resize(){
+canvas.width=canvas.offsetWidth;
+canvas.height=canvas.offsetHeight;
+}
+resize();
+window.addEventListener('resize',resize);
 
-function draw(){
-    ctx.clearRect(0,0,400,200);
+let balance=1000;
+let gameState='waiting';
+let multiplier=1;
+let progress=0;
+let crashPoint=2;
+let betActive=false;
+let betAmount=0;
+let history=[1.45,2.31,1.02,4.56];
 
-    ctx.fillStyle="red";
-    ctx.beginPath();
-    ctx.arc(x,y,10,0,Math.PI*2);
-    ctx.fill();
+const multText=document.getElementById('multiplier');
+const balText=document.getElementById('bal');
+const betBtn=document.getElementById('betBtn');
+const betInput=document.getElementById('bet');
 
-    if(running){
-        mult += 0.02;
-        x += 1;
-        y -= 0.5;
+function updateHistory(){
+const h=document.getElementById('history');
+h.innerHTML='';
+history.slice(-10).reverse().forEach(v=>{
+const d=document.createElement('div');
+d.className='badge';
+d.innerText=v.toFixed(2)+'x';
+h.appendChild(d);
+});
+}
+updateHistory();
 
-        document.getElementById("mult").innerText = mult.toFixed(2)+"x";
-
-        if(mult > 5){
-            running = false;
-            alert("Crashed at "+mult.toFixed(2));
-        }
-    }
-
-    requestAnimationFrame(draw);
+function randomCrash(){
+return parseFloat((1+Math.random()*8).toFixed(2));
 }
 
-function startGame(){
-    mult = 1;
-    x = 20;
-    y = 180;
-    running = true;
+betBtn.onclick=()=>{
+if(gameState==='waiting' && !betActive){
+let amt=parseFloat(betInput.value)||0;
+if(amt>balance||amt<=0)return;
+balance-=amt;
+betAmount=amt;
+betActive=true;
+balText.innerText=balance.toFixed(2);
+betBtn.innerText='WAITING';
+}
+else if(gameState==='running' && betActive){
+let win=betAmount*multiplier;
+balance+=win;
+balText.innerText=balance.toFixed(2);
+betBtn.innerText='BET';
+betActive=false;
+alert('Won '+win.toFixed(2)+' ETB');
+}
+};
+
+function startRound(){
+gameState='running';
+multiplier=1;
+progress=0;
+crashPoint=randomCrash();
+if(betActive){
+betBtn.innerText='CASH OUT';
+}
 }
 
-draw();
+function endRound(){
+gameState='crash';
+history.push(multiplier);
+updateHistory();
+multText.innerText=multiplier.toFixed(2)+'x';
+
+betBtn.innerText='BET';
+betActive=false;
+
+setTimeout(()=>{
+gameState='waiting';
+multText.innerText='Waiting...';
+setTimeout(startRound,3000);
+},2000);
+}
+
+function drawPlane(x,y){
+ctx.fillStyle='#cb0130';
+ctx.beginPath();
+ctx.moveTo(x,y);
+ctx.lineTo(x-25,y+10);
+ctx.lineTo(x-20,y);
+ctx.lineTo(x-25,y-10);
+ctx.closePath();
+ctx.fill();
+}
+
+function loop(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+if(gameState==='running'){
+multiplier+=0.01;
+progress+=2;
+
+multText.innerText=multiplier.toFixed(2)+'x';
+
+if(multiplier>=crashPoint){
+multiplier=crashPoint;
+endRound();
+}
+
+ctx.beginPath();
+ctx.moveTo(40,canvas.height-40);
+
+for(let i=0;i<progress;i++){
+let px=40+i;
+let py=(canvas.height-40)-Math.pow(i*0.09,1.4);
+ctx.lineTo(px,py);
+}
+
+ctx.strokeStyle='#cb0130';
+ctx.lineWidth=4;
+ctx.stroke();
+
+let planeX=40+progress;
+let planeY=(canvas.height-40)-Math.pow(progress*0.09,1.4);
+
+drawPlane(planeX,planeY);
+}
+
+requestAnimationFrame(loop);
+}
+
+setTimeout(startRound,3000);
+loop();
 </script>
 
 </body>
 </html>
+
+ማስታወሻ
+
+ምስሎች ካልተገኙ ጨዋታው ይሰራል፤ ነገር ግን image assets አይታዩም።
+
+ከፈለግህ next update:
+
+real airplane image
+
+sounds
+
+dual betting
+
+auto cashout
+
+live players
+
+mobile app style
+
+firebase backend
