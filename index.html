@@ -141,11 +141,11 @@
         .sub-section h3 { font-size: 13px; color: #7a8b9e; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .list-item { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #1f2630; }
 
-        /* Updated Asset Gallery Grid to 9 columns for all uploaded images */
-        .asset-gallery { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; margin-top: 10px; }
-        .asset-card { background: #111419; border: 1px solid #232a33; border-radius: 6px; padding: 2px; text-align: center; }
-        .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(15%); transition: transform 0.2s, filter 0.2s; }
-        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.05); }
+        /* Updated Asset Gallery Grid to 11 columns for all 11 uploaded images */
+        .asset-gallery { display: grid; grid-template-columns: repeat(11, 1fr); gap: 4px; margin-top: 10px; }
+        .asset-card { background: #111419; border: 1px solid #232a33; border-radius: 4px; padding: 1px; text-align: center; }
+        .asset-card img { width: 100%; height: auto; border-radius: 3px; display: block; filter: grayscale(10%); transition: transform 0.2s, filter 0.2s; }
+        .asset-card img:hover { filter: grayscale(0%); transform: scale(1.06); }
 
         /* Custom Toast Container */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; }
@@ -251,6 +251,8 @@
                 <div class="asset-card"><img src="1000002625.jpg" alt="Asset 25"></div>
                 <div class="asset-card"><img src="1000002626.jpg" alt="Asset 26"></div>
                 <div class="asset-card"><img src="1000002627.jpg" alt="Asset 27"></div>
+                <div class="asset-card"><img src="1000002628.jpg" alt="Asset 28"></div>
+                <div class="asset-card"><img src="1000002629.jpg" alt="Asset 29"></div>
             </div>
         </div>
 
@@ -314,7 +316,7 @@
         let isPlaneLoaded = false;
         planeImg.onload = () => { isPlaneLoaded = true; };
 
-        // Updated Array for all 9 uploaded image assets
+        // Updated Structural Array for all 11 uploaded image assets
         const assetSrcs = [
             "1000002619.jpg", 
             "1000002620.jpg", 
@@ -324,7 +326,9 @@
             "1000002624.jpg",
             "1000002625.jpg",
             "1000002626.jpg",
-            "1000002627.jpg"
+            "1000002627.jpg",
+            "1000002628.jpg",
+            "1000002629.jpg"
         ];
         const gameAssets = [];
         assetSrcs.forEach(src => {
@@ -344,11 +348,11 @@
 
         // Particles system for background floating structural images
         let backgroundParticles = [];
-        for(let i=0; i<9; i++) { 
+        for(let i=0; i<11; i++) { 
             backgroundParticles.push({ 
-                x: Math.random() * 500, 
-                y: Math.random() * 150, 
-                speed: 0.32 + Math.random() * 0.43 
+                x: Math.random() * 600, 
+                y: Math.random() * 160, 
+                speed: 0.30 + Math.random() * 0.40 
             }); 
         }
 
@@ -529,13 +533,13 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Floating Translucent Structural Images Layers (Iterating over 9 images)
+            // Floating Translucent Structural Images Layers (Iterating over 11 images)
             backgroundParticles.forEach((p, index) => {
                 ctx.save();
                 let assetIndex = index % gameAssets.length;
                 if (gameAssets[assetIndex] && gameAssets[assetIndex].complete) {
-                    ctx.globalAlpha = 0.13; // Premium subtle motion watermark style
-                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 28, 28);
+                    ctx.globalAlpha = 0.12; // Premium subtle motion watermark style
+                    ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 26, 26);
                 } else {
                     ctx.beginPath(); ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
                     ctx.fillStyle = "rgba(40, 50, 68, 0.08)"; ctx.fill();
