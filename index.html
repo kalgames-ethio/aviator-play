@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="am">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalgames Aviator</title>
+    <title>Kalgames Aviator Premium Edition</title>
     <style>
+        * { box-sizing: border-box; }
         body { 
             margin: 0; 
             background-color: #101115; 
@@ -18,32 +18,31 @@
             user-select: none; 
         }
         
-        /* Top Header */
+        /* Top Navigation Header */
         .top-bar { 
             width: 100%; 
-            max-width: 380px; 
+            max-width: 385px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             padding: 10px 14px; 
-            box-sizing: border-box; 
             background: #1b1c21; 
             border-bottom: 2px solid #141519; 
         }
         .logo { 
-            font-size: 18px; 
+            font-size: 19px; 
             font-weight: 900; 
             color: #cb0130; 
             font-style: italic; 
         }
         .balance { 
-            font-size: 15px; 
+            font-size: 14px; 
             color: #2ccb4a; 
             font-weight: bold; 
             background: #101115; 
             padding: 6px 14px; 
             border-radius: 20px; 
-            border: 1px solid #2c2c2e; 
+            border: 1px solid #2d303a; 
         }
 
         /* History Bar */
@@ -51,11 +50,10 @@
             display: flex; 
             gap: 6px; 
             width: 100%; 
-            max-width: 380px; 
+            max-width: 385px; 
             padding: 8px 12px; 
             overflow-x: auto; 
             background: #141519; 
-            box-sizing: border-box; 
             scrollbar-width: none; 
         }
         #history-bar::-webkit-scrollbar { display: none; }
@@ -65,31 +63,31 @@
             font-size: 11px; 
             font-weight: bold; 
             color: #fff; 
-            background: #1b1c21; 
-            min-width: 45px; 
+            min-width: 48px; 
             text-align: center; 
             border: 1px solid #232429; 
         }
-        .high { color: #c146e3; background: rgba(193, 70, 227, 0.15); border-color: rgba(193, 70, 227, 0.4); }
-        .low { color: #3498db; background: rgba(52, 152, 219, 0.15); border-color: rgba(52, 152, 219, 0.4); }
+        .hist-blue { color: #3498db; background: rgba(52, 152, 219, 0.12); border-color: rgba(52, 152, 219, 0.3); }
+        .hist-purple { color: #9b59b6; background: rgba(155, 89, 182, 0.12); border-color: rgba(155, 89, 182, 0.3); }
+        .hist-magenta { color: #c146e3; background: rgba(193, 70, 227, 0.15); border-color: rgba(193, 70, 227, 0.4); }
 
-        /* Game Screen Area */
+        /* Game Screen Canvas Box Area */
         .game-canvas-area { 
             position: relative; 
-            width: 95%; 
-            max-width: 365px; 
-            height: 220px; 
-            margin-top: 8px; 
+            width: 96%; 
+            max-width: 370px; 
+            height: 190px; 
+            margin-top: 6px; 
             background: #101115; 
-            border-radius: 12px; 
+            border-radius: 8px; 
             overflow: hidden; 
-            border: 1px solid #232429; 
+            border: 1px solid #1c1d22; 
         }
         #gameCanvas { width: 100%; height: 100%; display: block; }
         
         #multiplier-overlay { 
             position: absolute; 
-            top: 25%; 
+            top: 30%; 
             left: 0; 
             width: 100%; 
             text-align: center; 
@@ -97,129 +95,156 @@
             font-weight: 900; 
             color: #fff; 
             z-index: 10; 
-            font-family: sans-serif; 
         }
-        .status-msg { 
-            font-size: 13px; 
-            color: #aeaeae; 
-            position: absolute; 
-            bottom: 25px; 
-            width: 100%; 
-            text-align: center; 
-            z-index: 10; 
+
+        /* 🔴 Flew Away Notification Banner */
+        #flew-away-banner {
+            display: none;
+            position: absolute;
+            top: 30%;
+            left: 5%;
+            width: 90%;
+            background: rgba(203, 1, 48, 0.95);
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            border-radius: 12px;
+            z-index: 20;
+            box-shadow: 0 4px 20px rgba(203, 1, 48, 0.5);
         }
+        .flew-title { font-size: 13px; font-weight: bold; color: rgba(255,255,255,0.8); text-transform: uppercase; margin-bottom: 2px; }
+        .flew-val { font-size: 34px; font-weight: 900; }
+
+        /* ⏳ ፎቶው ላይ ያለው እውነተኛው WAITING FOR NEXT ROUND ማሳያ ክፍል */
+        #waiting-container {
+            display: none;
+            position: absolute;
+            top: 32%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 25;
+        }
+        .waiting-text {
+            font-size: 14px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .progress-bar-bg {
+            width: 60%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 auto;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #cb0130;
+            border-radius: 2px;
+        }
+
+        /* Dashboard Navigation Tabs */
+        .mid-nav-tabs {
+            width: 96%;
+            max-width: 370px;
+            background: #141519;
+            display: flex;
+            justify-content: space-around;
+            padding: 4px;
+            border-radius: 20px;
+            margin-top: 8px;
+            border: 1px solid #1c1d22;
+        }
+        .mid-tab {
+            color: #9a9da4;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 5px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        .mid-tab.active { color: #fff; background: #2c2d34; }
 
         /* Betting Section */
         .bet-area { 
-            width: 95%; 
-            max-width: 365px; 
-            margin-top: 10px; 
+            width: 96%; 
+            max-width: 370px; 
+            margin-top: 8px; 
             display: flex; 
             flex-direction: column; 
-            gap: 10px; 
-            box-sizing: border-box; 
+            gap: 8px; 
         }
         .bet-panel { 
             background: #1b1c21; 
-            padding: 12px; 
-            border-radius: 14px; 
+            padding: 10px; 
+            border-radius: 12px; 
             border: 1px solid #232429; 
-            display: grid; 
-            grid-template-columns: 1fr 1.1fr; 
-            gap: 12px; 
-            box-sizing: border-box; 
-        }
-        
-        .controls-left { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-            width: 100%; 
-        }
-        .amount-control { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            background: #101115; 
-            border-radius: 6px; 
-            padding: 4px 8px; 
-            border: 1px solid #2d303a; 
-            height: 38px; 
-            box-sizing: border-box; 
-        }
-        .minus-btn, .plus-btn { 
-            background: #232429; 
-            border: none; 
-            color: #fff; 
-            width: 26px; 
-            height: 26px; 
-            border-radius: 50%; 
-            font-size: 18px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-        .amount-input { 
-            background: none; 
-            border: none; 
-            color: #fff; 
-            font-size: 16px; 
-            font-weight: bold; 
-            width: 55px; 
-            text-align: center; 
-            outline: none; 
-        }
-        
-        .quick-chips { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 4px; 
-        }
-        .chip-btn { 
-            background: #101115; 
-            border: 1px solid #232429; 
-            color: #9a9da4; 
-            padding: 5px 0; 
-            font-size: 12px; 
-            font-weight: bold; 
-            border-radius: 4px; 
-            cursor: pointer; 
         }
 
-        /* 🟢 ኒዮን ሎሚ አረንጓዴ BET አዝራር */
-        .btn-container { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 100%; 
-            height: 100%; 
+        .panel-header-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
         }
+        .sub-tab {
+            font-size: 11px;
+            color: #757881;
+            font-weight: bold;
+            padding: 2px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #141519;
+            border: 1px solid #1c1d22;
+        }
+        .sub-tab.active { color: #fff; background: #2ccb4a; border-color: #2ccb4a; }
+
+        .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .controls-left { display: flex; flex-direction: column; gap: 5px; }
+        
+        .amount-control-wrapper {
+            display: flex;
+            align-items: center;
+            background: #101115; 
+            border-radius: 6px; 
+            border: 1px solid #2d303a; 
+            padding: 2px 4px;
+            height: 34px;
+        }
+        .minus-btn, .plus-btn { 
+            background: #232429; border: none; color: #fff; width: 22px; height: 22px; 
+            border-radius: 50%; font-size: 15px; font-weight: bold; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        .amount-input { 
+            background: none; border: none; color: #fff; font-size: 14px; 
+            font-weight: bold; width: 50px; text-align: center; outline: none; 
+        }
+        .quick-math-actions { display: flex; gap: 2px; margin-left: auto; }
+        .math-btn {
+            background: #1f2026; border: 1px solid #2d303a; color: #9a9da4;
+            font-size: 9px; font-weight: bold; padding: 3px 5px; border-radius: 3px; cursor: pointer;
+        }
+
+        .quick-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+        .chip-btn { 
+            background: #101115; border: 1px solid #232429; color: #9a9da4; 
+            padding: 4px 0; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; 
+        }
+
+        .btn-container { display: flex; align-items: center; justify-content: center; width: 100%; }
         .bet-button { 
-            background: #2ccb4a; 
-            color: #fff; 
-            border: none; 
-            border-radius: 12px; 
-            width: 100%; 
-            height: 100%; 
-            min-height: 76px; 
-            font-size: 22px; 
-            font-weight: 900; 
-            cursor: pointer; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            line-height: 1.2; 
-            box-shadow: 0 4px 12px rgba(44, 203, 74, 0.35);
+            background: #2ccb4a; color: #fff; border: none; border-radius: 8px; 
+            width: 100%; height: 100%; min-height: 58px; font-size: 19px; font-weight: 900; 
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; line-height: 1.1; box-shadow: 0 4px 10px rgba(44, 203, 74, 0.3);
         }
-        .bet-button span { 
-            font-size: 14px; 
-            font-weight: bold; 
-            color: #fff; 
-            margin-top: 2px; 
-        }
+        .bet-button span { font-size: 12px; font-weight: bold; color: rgba(255, 255, 255, 0.9); margin-top: 1px; }
         
         .bet-button.waiting { background: #e67e22; box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3); }
         .bet-button.cashout { background: #cb0130; box-shadow: 0 4px 10px rgba(203, 1, 48, 0.3); }
@@ -235,47 +260,84 @@
     <div id="history-bar"></div>
 
     <div class="game-canvas-area">
-        <canvas id="gameCanvas" width="365" height="220"></canvas>
+        <canvas id="gameCanvas" width="370" height="190"></canvas>
         <div id="multiplier-overlay">1.00x</div>
-        <div class="status-msg" id="status-text">አውሮፕላኑ እየተዘጋጀ ነው...</div>
+        
+        <div id="flew-away-banner">
+            <div class="flew-title">Flew Away</div>
+            <div class="flew-val" id="flew-val-text">1.00x</div>
+        </div>
+
+        <div id="waiting-container">
+            <div class="waiting-text">Waiting for next round</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar-fill-id"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mid-nav-tabs">
+        <div class="mid-tab active">All Bets</div>
+        <div class="mid-tab">My Bets</div>
+        <div class="mid-tab">Top</div>
     </div>
 
     <div class="bet-area">
         <div class="bet-panel">
-            <div class="controls-left">
-                <div class="amount-control">
-                    <button class="minus-btn" onclick="adjustAmount(1, -1)">-</button>
-                    <input type="number" class="amount-input" id="bet-amount-1" value="4">
-                    <button class="plus-btn" onclick="adjustAmount(1, 1)">+</button>
-                </div>
-                <div class="quick-chips">
-                    <button class="chip-btn" onclick="setAmount(1, 4)">4</button>
-                    <button class="chip-btn" onclick="setAmount(1, 10)">10</button>
-                    <button class="chip-btn" onclick="setAmount(1, 40)">40</button>
-                    <button class="chip-btn" onclick="setAmount(1, 100)">100</button>
-                </div>
+            <div class="panel-header-tabs">
+                <div class="sub-tab active">Bet</div>
+                <div class="sub-tab">Auto</div>
             </div>
-            <div class="btn-container">
-                <button class="bet-button" id="btn-1" onclick="placeBet(1)">BET<br><span id="sub-1">4.00 ETB</span></button>
+            <div class="panel-grid">
+                <div class="controls-left">
+                    <div class="amount-control-wrapper">
+                        <button class="minus-btn" onclick="adjustAmount(1, -1)">-</button>
+                        <input type="number" class="amount-input" id="bet-amount-1" value="4">
+                        <button class="plus-btn" onclick="adjustAmount(1, 1)">+</button>
+                        <div class="quick-math-actions">
+                            <button class="math-btn" onclick="multiplyAmount(1, 2)">X2</button>
+                            <button class="math-btn" onclick="multiplyAmount(1, 0.5)">/2</button>
+                        </div>
+                    </div>
+                    <div class="quick-chips">
+                        <button class="chip-btn" onclick="setAmount(1, 4)">4</button>
+                        <button class="chip-btn" onclick="setAmount(1, 10)">10</button>
+                        <button class="chip-btn" onclick="setAmount(1, 40)">40</button>
+                        <button class="chip-btn" onclick="setAmount(1, 100)">100</button>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button class="bet-button" id="btn-1" onclick="placeBet(1)">BET<br><span id="sub-1">4.00 ETB</span></button>
+                </div>
             </div>
         </div>
 
         <div class="bet-panel">
-            <div class="controls-left">
-                <div class="amount-control">
-                    <button class="minus-btn" onclick="adjustAmount(2, -1)">-</button>
-                    <input type="number" class="amount-input" id="bet-amount-2" value="4">
-                    <button class="plus-btn" onclick="adjustAmount(2, 1)">+</button>
-                </div>
-                <div class="quick-chips">
-                    <button class="chip-btn" onclick="setAmount(2, 4)">4</button>
-                    <button class="chip-btn" onclick="setAmount(2, 10)">10</button>
-                    <button class="chip-btn" onclick="setAmount(2, 40)">40</button>
-                    <button class="chip-btn" onclick="setAmount(2, 100)">100</button>
-                </div>
+            <div class="panel-header-tabs">
+                <div class="sub-tab active">Bet</div>
+                <div class="sub-tab">Auto</div>
             </div>
-            <div class="btn-container">
-                <button class="bet-button" id="btn-2" onclick="placeBet(2)">BET<br><span id="sub-2">4.00 ETB</span></button>
+            <div class="panel-grid">
+                <div class="controls-left">
+                    <div class="amount-control-wrapper">
+                        <button class="minus-btn" onclick="adjustAmount(2, -1)">-</button>
+                        <input type="number" class="amount-input" id="bet-amount-2" value="4">
+                        <button class="plus-btn" onclick="adjustAmount(2, 1)">+</button>
+                        <div class="quick-math-actions">
+                            <button class="math-btn" onclick="multiplyAmount(2, 2)">X2</button>
+                            <button class="math-btn" onclick="multiplyAmount(2, 0.5)">/2</button>
+                        </div>
+                    </div>
+                    <div class="quick-chips">
+                        <button class="chip-btn" onclick="setAmount(2, 4)">4</button>
+                        <button class="chip-btn" onclick="setAmount(2, 10)">10</button>
+                        <button class="chip-btn" onclick="setAmount(2, 40)">40</button>
+                        <button class="chip-btn" onclick="setAmount(2, 100)">100</button>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button class="bet-button" id="btn-2" onclick="placeBet(2)">BET<br><span id="sub-2">4.00 ETB</span></button>
+                </div>
             </div>
         </div>
     </div>
@@ -286,7 +348,10 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const multiplierOverlay = document.getElementById('multiplier-overlay');
-        const statusText = document.getElementById('status-text');
+        const flewBanner = document.getElementById('flew-away-banner');
+        const flewValText = document.getElementById('flew-val-text');
+        const waitingContainer = document.getElementById('waiting-container');
+        const progressBarFill = document.getElementById('progress-bar-fill-id');
 
         let balance = 1000.00;
         let isFlightInProgress = false;
@@ -297,12 +362,16 @@
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
 
-        const pastResults = [1.45, 2.70, 1.12, 5.84, 1.22, 19.50];
+        const pastResults = [1.24, 2.80, 1.05, 11.12, 1.95, 4.21, 24.50];
+        
         function renderHistory() {
             historyContainer.innerHTML = '';
             pastResults.slice(-7).reverse().forEach(res => {
                 const item = document.createElement('div');
-                item.className = 'hist-item ' + (res >= 2 ? 'high' : 'low');
+                if (res < 2.00) item.className = 'hist-item hist-blue';
+                else if (res >= 2.00 && res < 10.00) item.className = 'hist-item hist-purple';
+                else item.className = 'hist-item hist-magenta';
+                
                 item.innerText = res.toFixed(2) + 'x';
                 historyContainer.appendChild(item);
             });
@@ -321,57 +390,35 @@
                 ctx.moveTo(0, 0);
                 ctx.arc(0, 0, 400, i * rayAngle, (i + 1) * rayAngle);
                 ctx.lineTo(0, 0);
-                ctx.fillStyle = i % 2 === 0 ? '#14161c' : '#101115';
+                ctx.fillStyle = i % 2 === 0 ? '#131419' : '#101115';
                 ctx.fill();
             }
             ctx.restore();
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-            for (let x = 30; x < canvas.width; x += 15) ctx.fillRect(x, canvas.height - 20, 1.5, 1.5);
-            for (let y = 15; y < canvas.height - 20; y += 15) ctx.fillRect(25, y, 1.5, 1.5);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+            for (let x = 20; x < canvas.width; x += 16) ctx.fillRect(x, canvas.height - 20, 1.2, 1.2);
+            for (let y = 10; y < canvas.height - 20; y += 16) ctx.fillRect(20, y, 1.2, 1.2);
         }
 
-        // ✈️ 100% አስተማማኝ እና የተስተካከለ የቀይ አውሮፕላን የኮድ ስዕል
         function drawAviatorJet(x, y) {
             ctx.save();
             ctx.translate(x, y);
-            ctx.rotate(-0.08); // ትንሽ ቀና ብሎ እንዲበር
+            ctx.rotate(-0.06); 
 
-            // የጄት ዋና አካል
             ctx.fillStyle = '#cb0130';
             ctx.beginPath();
-            ctx.moveTo(22, 0);
-            ctx.quadraticCurveTo(10, -7, -15, -5);
-            ctx.lineTo(-22, -11);
-            ctx.lineTo(-25, -11);
-            ctx.lineTo(-22, 0);
-            ctx.lineTo(-25, 11);
-            ctx.lineTo(-22, 11);
-            ctx.quadraticCurveTo(-15, 7, 22, 0);
+            ctx.moveTo(20, 0);
+            ctx.quadraticCurveTo(8, -6, -12, -4);
+            ctx.lineTo(-18, -9); ctx.lineTo(-21, -9); ctx.lineTo(-18, 0); ctx.lineTo(-21, 9); ctx.lineTo(-18, 9);
+            ctx.quadraticCurveTo(-12, 6, 20, 0);
             ctx.fill();
 
-            // የኋላ ክንፎች
-            ctx.fillStyle = '#b00128';
-            ctx.beginPath();
-            ctx.moveTo(-2, -4);
-            ctx.lineTo(-12, -23);
-            ctx.lineTo(-18, -23);
-            ctx.lineTo(-8, -4);
-            ctx.fill();
+            ctx.fillStyle = '#ad0229';
+            ctx.beginPath(); ctx.moveTo(-1, -3); ctx.lineTo(-10, -20); ctx.lineTo(-15, -20); ctx.lineTo(-6, -3); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(-1, 3); ctx.lineTo(-10, 20); ctx.lineTo(-15, 20); ctx.lineTo(-6, 3); ctx.fill();
 
-            ctx.beginPath();
-            ctx.moveTo(-2, 4);
-            ctx.lineTo(-12, 23);
-            ctx.lineTo(-18, 23);
-            ctx.lineTo(-8, 4);
-            ctx.fill();
-
-            // የሞተር ፍንጣቂ ነጭ ብርሃን
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.beginPath();
-            ctx.arc(-23, 0, 3.5, 0, Math.PI * 2);
-            ctx.fill();
-
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath(); ctx.arc(-19, 0, 3, 0, Math.PI * 2); ctx.fill();
             ctx.restore();
         }
 
@@ -379,49 +426,67 @@
             drawBackground();
             
             if (isFlightInProgress) {
-                let startX = 25;
-                let startY = canvas.height - 35;
-                let endX = startX + flightProgress * (canvas.width - 75);
-                let endY = startY - Math.pow(flightProgress, 2.2) * (canvas.height - 75);
+                let startX = 20;
+                let startY = canvas.height - 25;
+                let endX = startX + flightProgress * (canvas.width - 65);
+                let endY = startY - Math.pow(flightProgress, 2.1) * (canvas.height - 65);
 
-                // ስስ ቀይ ጥላ (Gradient Area)
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
-                let cpX = startX + (endX - startX) * 0.6;
+                let cpX = startX + (endX - startX) * 0.62;
                 let cpY = startY;
                 ctx.quadraticCurveTo(cpX, cpY, endX, endY);
                 ctx.lineTo(endX, startY);
                 ctx.closePath();
 
                 let fillGrad = ctx.createLinearGradient(0, endY, 0, startY);
-                fillGrad.addColorStop(0, 'rgba(203, 1, 48, 0.24)');
+                fillGrad.addColorStop(0, 'rgba(203, 1, 48, 0.22)');
                 fillGrad.addColorStop(1, 'rgba(203, 1, 48, 0.0)');
                 ctx.fillStyle = fillGrad;
                 ctx.fill();
 
-                // ቀጭኑ ደማቅ ቀይ መስመር
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 ctx.quadraticCurveTo(cpX, cpY, endX, endY);
-                ctx.strokeStyle = '#df0237';
-                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = '#e10237';
+                ctx.lineWidth = 2.2;
                 ctx.stroke();
 
-                // አውሮፕላኑን መሳል
                 drawAviatorJet(endX, endY);
             }
         }
 
+        // ⏳ አዲሱ ዙር ከመጀመሩ በፊት ቀዩ መስመር የሚሞላበት አኒሜሽን
+        function startWaitingPeriod() {
+            flewBanner.style.display = "none";
+            multiplierOverlay.style.display = "none";
+            waitingContainer.style.display = "block";
+            
+            let loadProgress = 0;
+            progressBarFill.style.width = "0%";
+
+            let loadInterval = setInterval(() => {
+                loadProgress += 2;
+                progressBarFill.style.width = loadProgress + "%";
+                
+                if (loadProgress >= 100) {
+                    clearInterval(loadInterval);
+                    waitingContainer.style.display = "none";
+                    startNewRound();
+                }
+            }, 100); // 5 ሰከንድ ጠቅላላ መሙያ ጊዜ
+        }
+
         function startNewRound() {
+            multiplierOverlay.style.display = "block";
             flightProgress = 0;
             currentMultiplier = 1.00;
             
             let rand = Math.random();
-            if (rand < 0.08) crashPoint = 1.00; 
-            else crashPoint = (1 + 7 * Math.random()).toFixed(2); 
+            if (rand < 0.07) crashPoint = 1.00; 
+            else crashPoint = (1 + 9 * Math.random()).toFixed(2); 
 
             isFlightInProgress = true;
-            statusText.innerText = "";
             multiplierOverlay.style.color = "#fff";
 
             handleRoundStartBets();
@@ -430,8 +495,8 @@
 
         function flightSequence() {
             if (currentMultiplier < crashPoint && isFlightInProgress) {
-                flightProgress += 0.0035; 
-                currentMultiplier = (1.00 + Math.pow(flightProgress * 4, 2.2)).toFixed(2);
+                flightProgress += 0.0032; 
+                currentMultiplier = (1.00 + Math.pow(flightProgress * 4, 2.1)).toFixed(2);
                 multiplierOverlay.innerText = currentMultiplier + "x";
                 
                 updateCashoutLabels();
@@ -444,15 +509,17 @@
 
         function endRound() {
             isFlightInProgress = false;
-            multiplierOverlay.innerText = "FLEW AWAY!";
-            multiplierOverlay.style.color = "#cb0130";
-            statusText.innerText = "ቀጣይ ዙር በ 4 ሰከንድ ውስጥ ይጀምራል...";
+            
+            multiplierOverlay.style.display = "none";
+            flewValText.innerText = currentMultiplier + "x";
+            flewBanner.style.display = "block";
             
             pastResults.push(parseFloat(currentMultiplier));
             renderHistory();
             resetPanels();
             
-            setTimeout(startNewRound, 4000);
+            // ከ 3 ሰከንድ ቀይ ባነር በኋላ የፕሮግረስ ባሩን መጠባበቂያ ያስጀምራል
+            setTimeout(startWaitingPeriod, 3000);
         }
 
         function placeBet(id) {
@@ -482,7 +549,7 @@
                 btn.childNodes[0].nodeValue = "BET";
                 sub.innerText = amt.toFixed(2) + " ETB";
                 btn.className = "bet-button";
-                alert("አሸንፈዋል! +" + winAmt.toFixed(2) + " ETB");
+                alert("እንኳን ደስ አሰኞት! +" + winAmt.toFixed(2) + " ETB አሸንፈዋል!");
             }
         }
 
@@ -531,6 +598,14 @@
             }
         }
 
+        function multiplyAmount(id, factor) {
+            let input = document.getElementById('bet-amount-' + id);
+            let current = parseInt(input.value) || 0;
+            let newVal = Math.max(1, Math.round(current * factor));
+            input.value = newVal;
+            updateButtonSub(id, newVal);
+        }
+
         function setAmount(id, val) {
             document.getElementById('bet-amount-' + id).value = val;
             updateButtonSub(id, val);
@@ -546,7 +621,7 @@
         window.onload = function() {
             renderHistory();
             drawGame();
-            startNewRound();
+            startWaitingPeriod(); // በመጠባበቂያ ፕሮግረስ ባር ጨዋታውን ያስጀምራል
         }
     </script>
 </body>
