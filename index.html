@@ -8,31 +8,31 @@
         body { margin: 0; background-color: #000; color: #fff; font-family: 'Roboto', sans-serif; display: flex; flex-direction: column; align-items: center; -webkit-user-select: none; user-select: none; }
         
         /* የላይኛው ባር */
-        .top-bar { width: 100%; max-width: 380px; display: flex; justify-content: space-between; align-items: center; padding: 10px; box-sizing: border-box; background: #1c1c1e; border-bottom: 1px solid #2c2c2e; }
-        .logo { font-size: 18px; font-weight: bold; color: #cb0130; font-style: italic; }
-        .balance { font-size: 15px; color: #2cba42; font-weight: bold; background: #252525; padding: 4px 10px; border-radius: 20px; }
+        .top-bar { width: 100%; max-width: 380px; display: flex; justify-content: space-between; align-items: center; padding: 12px; box-sizing: border-box; background: #1c1c1e; border-bottom: 1px solid #2c2c2e; }
+        .logo { font-size: 20px; font-weight: bold; color: #e91e63; font-style: italic; }
+        .balance { font-size: 16px; color: #2cba42; font-weight: bold; background: #252525; padding: 5px 12px; border-radius: 20px; }
 
         /* የታሪክ ባር */
         #history-bar { display: flex; gap: 6px; width: 100%; max-width: 380px; padding: 8px; overflow-x: auto; background: #18181c; box-sizing: border-box; }
-        .hist-item { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; color: #fff; background: #2c2c2e; min-width: 45px; text-align: center; }
-        .high { color: #c146e3; background: rgba(193, 70, 227, 0.15); border: 1px solid #c146e3; }
-        .low { color: #3498db; background: rgba(52, 152, 219, 0.15); border: 1px solid #3498db; }
+        .hist-item { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #fff; background: #2c2c2e; min-width: 48px; text-align: center; }
+        .high { color: #c146e3; background: rgba(193, 70, 227, 0.2); border: 1px solid #c146e3; }
+        .low { color: #3498db; background: rgba(52, 152, 219, 0.2); border: 1px solid #3498db; }
 
-        /* የጨዋታው ካንቫስ (ሜዳ) */
-        .game-canvas-area { position: relative; width: 95%; max-width: 360px; height: 200px; margin-top: 10px; background: #0c0c0e; border-radius: 16px; overflow: hidden; border: 1px solid #232328; }
+        /* የጨዋታው ሜዳ (Canvas Area) */
+        .game-canvas-area { position: relative; width: 95%; max-width: 360px; height: 210px; margin-top: 12px; background: #0c0c0e; border-radius: 16px; overflow: hidden; border: 1px solid #232328; }
         #gameCanvas { width: 100%; height: 100%; display: block; }
-        #multiplier-overlay { position: absolute; top: 35%; left: 0; width: 100%; text-align: center; font-size: 48px; font-weight: 900; color: #fff; z-index: 10; font-family: monospace; }
-        .status-msg { font-size: 13px; color: #8e8e93; position: absolute; bottom: 12px; width: 100%; text-align: center; z-index: 10; font-weight: 500; }
+        #multiplier-overlay { position: absolute; top: 30%; left: 0; width: 100%; text-align: center; font-size: 52px; font-weight: 900; color: #fff; z-index: 10; font-family: sans-serif; }
+        .status-msg { font-size: 14px; color: #8e8e93; position: absolute; bottom: 15px; width: 100%; text-align: center; z-index: 10; font-weight: 500; }
 
-        /* የመወራረጃ ክፍሎች (ልክ እንደ ዋናው ሁለት ፓነል) */
+        /* የመወራረጃ ክፍሎች */
         .bet-area { width: 95%; max-width: 360px; margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .bet-panel { background: #1c1c1e; padding: 12px; border-radius: 14px; border: 1px solid #2c2c2e; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        .amount-control { display: flex; align-items: center; justify-content: space-between; width: 100%; background: #0c0c0e; border-radius: 8px; padding: 8px; box-sizing: border-box; margin-bottom: 8px; border: 1px solid #2c2c2e; }
-        .currency { color: #8e8e93; font-weight: bold; font-size: 12px; }
+        .bet-panel { background: #1c1c1e; padding: 14px; border-radius: 14px; border: 1px solid #2c2c2e; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
+        .amount-control { display: flex; align-items: center; justify-content: space-between; width: 100%; background: #0c0c0e; border-radius: 8px; padding: 8px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #2c2c2e; }
+        .currency { color: #e91e63; font-weight: bold; font-size: 13px; }
         .amount-input { background: none; border: none; color: #fff; font-size: 1.3rem; font-weight: bold; width: 70%; text-align: center; outline: none; }
         
-        /* አረንጓዴው BET ቁልፍ */
-        .bet-button { background: linear-border; background-color: #2cba42; color: white; border: none; padding: 14px; font-size: 1.4rem; font-weight: bold; border-radius: 10px; width: 100%; cursor: pointer; box-shadow: 0 4px 12px rgba(44, 186, 66, 0.4); text-transform: uppercase; }
+        /* አረንጓዴው የውርርድ ቁልፍ */
+        .bet-button { background-color: #2cba42; color: white; border: none; padding: 14px; font-size: 1.4rem; font-weight: bold; border-radius: 10px; width: 100%; cursor: pointer; box-shadow: 0 4px 12px rgba(44, 186, 66, 0.4); text-transform: uppercase; }
         .bet-button.waiting { background-color: #e67e22; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4); }
         .bet-button.cashout { background-color: #cb0130; box-shadow: 0 4px 12px rgba(203, 1, 48, 0.4); }
     </style>
@@ -47,7 +47,7 @@
     <div id="history-bar"></div>
 
     <div class="game-canvas-area">
-        <canvas id="gameCanvas" width="360" height="200"></canvas>
+        <canvas id="gameCanvas" width="360" height="210"></canvas>
         <div id="multiplier-overlay">1.00x</div>
         <div class="status-msg" id="status-text">አውሮፕላኑ እየተዘጋጀ ነው...</div>
     </div>
@@ -86,11 +86,10 @@
         let bet1 = { amount: 0, status: 'idle' };
         let bet2 = { amount: 0, status: 'idle' };
 
-        // የዘፈቀደ ታሪክ መሙያ
-        const pastResults = [1.34, 5.21, 1.12, 14.50, 2.03, 1.05];
+        const pastResults = [1.45, 2.87, 1.12, 5.40, 1.86, 12.02];
         function renderHistory() {
             historyContainer.innerHTML = '';
-            pastResults.slice(-7).reverse().forEach(res => {
+            pastResults.slice(-6).reverse().forEach(res => {
                 const item = document.createElement('div');
                 item.className = 'hist-item ' + (res >= 2 ? 'high' : 'low');
                 item.innerText = res.toFixed(2) + 'x';
@@ -98,24 +97,25 @@
             });
         }
 
-        // የቀይ አውሮፕላን ምስል (SVG)
+        // 🔴 የተስተካከለ እውነተኛ ደማቅ ቀይ አውሮፕላን (Red SVG Image)
         const planeImg = new Image();
-        planeImg.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cb0130"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`);
+        planeImg.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23e91e63"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`);
 
-        // ዋናው የመሳያ ሲስተም (የበራሪው ጥላ መፍጠሪያ)
+        // ግራፉን እና ጥላውን በምስል መሳያ ሲስተም
         function drawGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             if (isFlightInProgress) {
                 let points = [];
+                // ለስላሳ የጥምዝ መስመር አሰራር (Curved Line)
                 for (let i = 0; i <= flightTime; i++) {
-                    let x = (i / 220) * (canvas.width - 60);
-                    let y = canvas.height - 30 - (Math.pow(i / 110, 2.5) * 20);
+                    let x = (i / 180) * (canvas.width - 50);
+                    let y = canvas.height - 25 - (Math.pow(i / 100, 2.2) * 22);
                     points.push({x: x, y: y});
                 }
 
                 if (points.length > 1) {
-                    // 1. በስተጀርባ ያለውን የቀይ ጥላ (Filled Glow) መሳል
+                    // 1. በስተጀርባ ያለውን የቀይ ጥላ (Red Filled Glow Area) መሙላት
                     ctx.beginPath();
                     ctx.moveTo(0, canvas.height);
                     points.forEach(p => ctx.lineTo(p.x, p.y));
@@ -123,8 +123,8 @@
                     ctx.closePath();
                     
                     let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                    gradient.addColorStop(0, 'rgba(203, 1, 48, 0.4)');
-                    gradient.addColorStop(1, 'rgba(203, 1, 48, 0.0)');
+                    gradient.addColorStop(0, 'rgba(233, 30, 99, 0.35)'); // ደማቅ ቀይ ጥላ ከላይ
+                    gradient.addColorStop(1, 'rgba(233, 30, 99, 0.0)');  // ወደ ታች ሲወርድ ይጠፋል
                     ctx.fillStyle = gradient;
                     ctx.fill();
 
@@ -132,18 +132,20 @@
                     ctx.beginPath();
                     ctx.moveTo(points[0].x, points[0].y);
                     points.forEach(p => ctx.lineTo(p.x, p.y));
-                    ctx.strokeStyle = '#cb0130';
+                    ctx.strokeStyle = '#e91e63';
                     ctx.lineWidth = 4;
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = '#cb0130';
                     ctx.stroke();
-                    ctx.shadowBlur = 0; // reset
                 }
 
-                // 3. የሚበረውን አውሮፕላን መሳል
+                // 3. የተለቀቀውን ትልቅ ቀይ አውሮፕላን መሳል
                 let lastPoint = points[points.length - 1];
                 if (lastPoint.x < canvas.width && lastPoint.y > 0) {
-                    ctx.drawImage(planeImg, lastPoint.x - 10, lastPoint.y - 20, 32, 32);
+                    ctx.save();
+                    // አውሮፕላኑ ወደ ላይ አቅጣጫ እንዲይዝ በትንሹ ማዘንበል
+                    ctx.translate(lastPoint.x, lastPoint.y);
+                    ctx.rotate(-0.2); 
+                    ctx.drawImage(planeImg, -20, -20, 42, 42); // መጠን ወደ 42 ከፍ ብሏል
+                    ctx.restore();
                 }
             }
         }
@@ -152,30 +154,25 @@
             flightTime = 0;
             currentMultiplier = 1.00;
             
-            // እውነተኛ የ Aviator የዕድል ስሌት
             let rand = Math.random();
-            if (rand < 0.1) crashPoint = 1.00; // 10% የመክሸፍ ዕድል
-            else crashPoint = (1 + 9 * Math.random()).toFixed(2); 
+            if (rand < 0.1) crashPoint = 1.00; 
+            else crashPoint = (1 + 7 * Math.random()).toFixed(2); 
 
             isFlightInProgress = true;
             statusText.innerText = "";
             multiplierOverlay.style.color = "#fff";
 
-            // ውርርድ ማስተካከያ
             handleRoundStartBets();
-            
             flightSequence();
         }
 
         function flightSequence() {
             if (currentMultiplier < crashPoint && isFlightInProgress) {
-                flightTime += 0.6;
-                currentMultiplier = (1.00 + Math.pow(flightTime / 80, 2)).toFixed(2);
+                flightTime += 0.5;
+                currentMultiplier = (1.00 + Math.pow(flightTime / 70, 2)).toFixed(2);
                 multiplierOverlay.innerText = currentMultiplier + "x";
                 
-                // የ Cashout ቁልፍ ላይ የሚሰራውን ብር ማሳየት
                 updateCashoutLabels();
-                
                 drawGame();
                 requestAnimationFrame(flightSequence);
             } else if (isFlightInProgress) {
@@ -211,7 +208,6 @@
                     btn.className = "bet-button waiting";
                 }
             } else if (isFlightInProgress && currentBet.status === 'active') {
-                // CASH OUT ማድረግ
                 let winAmt = currentBet.amount * currentMultiplier;
                 balance += winAmt;
                 balanceElement.innerText = balance.toFixed(2) + " ETB";
@@ -249,7 +245,6 @@
             document.getElementById('btn-2').className = "bet-button";
         }
 
-        // ጫን ሲል እንዲጀምር
         window.onload = function() {
             renderHistory();
             startNewRound();
