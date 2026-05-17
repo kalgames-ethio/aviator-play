@@ -1,302 +1,392 @@
-Aviator Pro - Fixed & Updated Version
-
-ይህ ፋይል ከአንተ original code የተስተካከለ እና የተዘመነ version ነው።
-
-የተስተካከሉ ችግኞች
-
-childNodes error ተወግዷል
-
-canvas resize issue ተስተካክሏል
-
-multiplier freeze bug ተስተካክሏል
-
-buttons state bug ተስተካክሏል
-
-game loop smoother ተደርጓል
-
-waiting/running/crash transitions ተስተካክለዋል
-
-mobile support ተሻሽሏል
-
-
-አጠቃቀም
-
-1. index.html ፍጠር
-
-
-2. ይህን ሙሉ code ጫን
-
-
-3. Save አድርግ
-
-
-4. Chrome ውስጥ ክፈት
-
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="am">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalgames Aviator Pro</title>
-<style>
-body{
-margin:0;
-background:#0b0e11;
-font-family:Arial,sans-serif;
-color:white;
-overflow:hidden;
-}
-.top{
-padding:15px;
-background:#11161d;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-.balance{
-background:#1b222c;
-padding:8px 15px;
-border-radius:20px;
-color:#2ccb4a;
-font-weight:bold;
-}
-.game{
-position:relative;
-height:300px;
-background:#141921;
-margin:10px;
-border-radius:10px;
-overflow:hidden;
-}
-canvas{
-width:100%;
-height:100%;
-}
-.multiplier{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:48px;
-font-weight:bold;
-text-shadow:0 0 15px #cb0130;
-}
-.controls{
-padding:15px;
-display:flex;
-gap:10px;
-}
-input{
-flex:1;
-padding:12px;
-font-size:18px;
-background:#1b222c;
-border:none;
-color:white;
-border-radius:8px;
-}
-button{
-flex:1;
-padding:12px;
-font-size:18px;
-font-weight:bold;
-background:#2ccb4a;
-border:none;
-border-radius:8px;
-color:white;
-}
-.history{
-display:flex;
-gap:5px;
-padding:10px;
-overflow:auto;
-}
-.badge{
-padding:5px 10px;
-background:#1b222c;
-border-radius:20px;
-font-size:12px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalgames Aviator Pro - Luxury Edition</title>
+    <style>
+        /* Base & Reset Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background-color: #0b0e11;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Loading Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0b0e11;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .rocket-loader { font-size: 50px; animation: bounce 1s infinite alternate; }
+        .loading-text { margin-top: 20px; font-size: 24px; font-weight: bold; color: #cb0130; letter-spacing: 2px; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+
+        /* Premium Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: linear-gradient(145deg, #181c22, #111419);
+            border-bottom: 1px solid #232a33;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .logo { font-size: 20px; font-weight: 800; color: #fff; }
+        .logo span { color: #cb0130; }
+        .balance-container {
+            background: #1f2630; padding: 6px 15px; border-radius: 20px;
+            border: 1px solid #2d3846; font-weight: bold; color: #2ccb4a;
+        }
+
+        /* Layout Grid */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 15px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+        }
+        @media (min-width: 768px) {
+            .main-container {
+                grid-template-columns: 3fr 1fr;
+            }
+        }
+
+        /* Game Screen Area */
+        .game-wrapper {
+            position: relative;
+            background: #141921;
+            border-radius: 12px;
+            border: 1px solid #232a33;
+            overflow: hidden;
+            height: 260px;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .multiplier-display {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 44px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 20px #cb0130;
+            z-index: 5;
+        }
+
+        .history-ribbon {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            background: #141921;
+            overflow-x: auto;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .history-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 55px;
+            text-align: center;
+            background: #1f2630;
+        }
+
+        .bet-area-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        @media (min-width: 600px) {
+            .bet-area-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .bet-panel {
+            background: #181c22;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #232a33;
+        }
+
+        .bet-controls-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .amount-selector {
+            display: flex;
+            align-items: center;
+            background: #0b0e11;
+            border-radius: 6px;
+            border: 1px solid #232a33;
+            padding: 2px;
+        }
+
+        .math-btn {
+            background: #1e2530;
+            border: none;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .input-box {
+            background: none;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .main-bet-btn {
+            background: #2ccb4a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            height: 64px;
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sub-section {
+            background: #181c22;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #232a33;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #141921;
+            border-top: 1px solid #232a33;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+        }
+
+        .nav-item {
+            color: #7a8b9e;
+            font-size: 11px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 
-<div class="top">
-<div>🚀 Kalgames Aviator</div>
-<div class="balance"><span id="bal">1000.00</span> ETB</div>
+<div id="splash-screen">
+    <div class="rocket-loader">🚀</div>
+    <div class="loading-text">KALGAMES</div>
 </div>
 
-<div class="history" id="history"></div>
-
-<div class="game">
-<div class="multiplier" id="multiplier">Waiting...</div>
-<canvas id="canvas"></canvas>
+<div class="top-bar">
+    <div class="logo">🚀 Aviator <span>Pro</span></div>
+    <div class="balance-container">
+        <span id="balance-amount">1000.00</span> ETB
+    </div>
 </div>
 
-<div class="controls">
-<input type="number" id="bet" value="50">
-<button id="betBtn">BET</button>
+<div class="main-container">
+
+    <div>
+
+        <div class="history-ribbon" id="history-ribbon"></div>
+
+        <div class="game-wrapper">
+            <div class="multiplier-display" id="multiplier-text">Waiting...</div>
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <div class="bet-area-grid">
+
+            <div class="bet-panel">
+                <div class="bet-controls-row">
+
+                    <div class="amount-selector">
+                        <button class="math-btn">-</button>
+                        <input type="number" class="input-box" value="40">
+                        <button class="math-btn">+</button>
+                    </div>
+
+                    <button class="main-bet-btn">
+                        BET
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="sidebar">
+
+        <div class="sub-section">
+            <h3>Live Board</h3>
+        </div>
+
+        <div class="sub-section">
+            <h3>Room Chat 💬</h3>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="bottom-nav">
+    <a href="#" class="nav-item">🏠<span>Home</span></a>
+    <a href="#" class="nav-item">🚀<span>Aviator</span></a>
+    <a href="#" class="nav-item">🎰<span>Casino</span></a>
+    <a href="#" class="nav-item">👤<span>Profile</span></a>
 </div>
 
 <script>
-const canvas=document.getElementById('canvas');
-const ctx=canvas.getContext('2d');
-
-function resize(){
-canvas.width=canvas.offsetWidth;
-canvas.height=canvas.offsetHeight;
-}
-resize();
-window.addEventListener('resize',resize);
-
-let balance=1000;
-let gameState='waiting';
-let multiplier=1;
-let progress=0;
-let crashPoint=2;
-let betActive=false;
-let betAmount=0;
-let history=[1.45,2.31,1.02,4.56];
-
-const multText=document.getElementById('multiplier');
-const balText=document.getElementById('bal');
-const betBtn=document.getElementById('betBtn');
-const betInput=document.getElementById('bet');
-
-function updateHistory(){
-const h=document.getElementById('history');
-h.innerHTML='';
-history.slice(-10).reverse().forEach(v=>{
-const d=document.createElement('div');
-d.className='badge';
-d.innerText=v.toFixed(2)+'x';
-h.appendChild(d);
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
+    }, 2000);
 });
-}
-updateHistory();
 
-function randomCrash(){
-return parseFloat((1+Math.random()*8).toFixed(2));
-}
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-betBtn.onclick=()=>{
-if(gameState==='waiting' && !betActive){
-let amt=parseFloat(betInput.value)||0;
-if(amt>balance||amt<=0)return;
-balance-=amt;
-betAmount=amt;
-betActive=true;
-balText.innerText=balance.toFixed(2);
-betBtn.innerText='WAITING';
+function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
 }
-else if(gameState==='running' && betActive){
-let win=betAmount*multiplier;
-balance+=win;
-balText.innerText=balance.toFixed(2);
-betBtn.innerText='BET';
-betActive=false;
-alert('Won '+win.toFixed(2)+' ETB');
-}
-};
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-function startRound(){
-gameState='running';
-multiplier=1;
-progress=0;
-crashPoint=randomCrash();
-if(betActive){
-betBtn.innerText='CASH OUT';
-}
+let multiplier = 1;
+let progress = 0;
+let running = false;
+
+function startRound() {
+    multiplier = 1;
+    progress = 0;
+    running = true;
 }
 
-function endRound(){
-gameState='crash';
-history.push(multiplier);
-updateHistory();
-multText.innerText=multiplier.toFixed(2)+'x';
+function drawPlane(x, y) {
+    ctx.fillStyle = '#cb0130';
 
-betBtn.innerText='BET';
-betActive=false;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - 20, y + 8);
+    ctx.lineTo(x - 15, y);
+    ctx.lineTo(x - 20, y - 8);
+    ctx.closePath();
 
-setTimeout(()=>{
-gameState='waiting';
-multText.innerText='Waiting...';
-setTimeout(startRound,3000);
-},2000);
+    ctx.fill();
 }
 
-function drawPlane(x,y){
-ctx.fillStyle='#cb0130';
-ctx.beginPath();
-ctx.moveTo(x,y);
-ctx.lineTo(x-25,y+10);
-ctx.lineTo(x-20,y);
-ctx.lineTo(x-25,y-10);
-ctx.closePath();
-ctx.fill();
+function gameLoop() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (running) {
+
+        multiplier += 0.01;
+        progress += 2;
+
+        document.getElementById('multiplier-text').innerText =
+            multiplier.toFixed(2) + 'x';
+
+        if (multiplier > 5) {
+            running = false;
+
+            setTimeout(() => {
+                document.getElementById('multiplier-text').innerText =
+                    'Waiting...';
+
+                setTimeout(startRound, 3000);
+
+            }, 2000);
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(40, canvas.height - 40);
+
+        for (let i = 0; i < progress; i++) {
+
+            let px = 40 + i;
+            let py = (canvas.height - 40) - Math.pow(i * 0.09, 1.4);
+
+            ctx.lineTo(px, py);
+        }
+
+        ctx.strokeStyle = '#cb0130';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        let planeX = 40 + progress;
+        let planeY = (canvas.height - 40) - Math.pow(progress * 0.09, 1.4);
+
+        drawPlane(planeX, planeY);
+    }
+
+    requestAnimationFrame(gameLoop);
 }
 
-function loop(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
+setTimeout(startRound, 3000);
 
-if(gameState==='running'){
-multiplier+=0.01;
-progress+=2;
-
-multText.innerText=multiplier.toFixed(2)+'x';
-
-if(multiplier>=crashPoint){
-multiplier=crashPoint;
-endRound();
-}
-
-ctx.beginPath();
-ctx.moveTo(40,canvas.height-40);
-
-for(let i=0;i<progress;i++){
-let px=40+i;
-let py=(canvas.height-40)-Math.pow(i*0.09,1.4);
-ctx.lineTo(px,py);
-}
-
-ctx.strokeStyle='#cb0130';
-ctx.lineWidth=4;
-ctx.stroke();
-
-let planeX=40+progress;
-let planeY=(canvas.height-40)-Math.pow(progress*0.09,1.4);
-
-drawPlane(planeX,planeY);
-}
-
-requestAnimationFrame(loop);
-}
-
-setTimeout(startRound,3000);
-loop();
+gameLoop();
 </script>
 
 </body>
 </html>
-
-ማስታወሻ
-
-ምስሎች ካልተገኙ ጨዋታው ይሰራል፤ ነገር ግን image assets አይታዩም።
-
-ከፈለግህ next update:
-
-real airplane image
-
-sounds
-
-dual betting
-
-auto cashout
-
-live players
-
-mobile app style
-
-firebase backend
