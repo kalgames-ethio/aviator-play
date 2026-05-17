@@ -1,203 +1,65 @@
-<!DOCTYPE html><html lang="am">
+
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalgames Aviator Pro - Fixed Edition</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-        }body {
-        background-color: #0b0e11;
-        color: #fff;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        padding-bottom: 60px;
-    }
-
-    #splash-screen {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background-color: #0b0e11;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        transition: opacity 0.5s ease;
-    }
-
-    .rocket-loader { font-size: 50px; animation: bounce 1s infinite alternate; }
-    .loading-text { margin-top: 20px; font-size: 24px; font-weight: bold; color: #cb0130; }
-
-    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
-
-    .top-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 20px;
-        background: #181c22;
-    }
-
-    .logo span { color: #cb0130; }
-
-    .balance-container {
-        background: #1f2630;
-        padding: 6px 15px;
-        border-radius: 20px;
-        color: #2ccb4a;
-    }
-
-    .game-wrapper {
-        position: relative;
-        height: 260px;
-        background: #141921;
-        border-radius: 12px;
-        margin: 10px;
-    }
-
-    canvas { width: 100%; height: 100%; display: block; }
-
-    .multiplier-display {
-        position: absolute;
-        top: 40%; left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 40px;
-    }
-
-    .main-bet-btn {
-        background: #2ccb4a;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        height: 60px;
-        width: 100%;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .main-bet-btn.waiting { background: orange; }
-    .main-bet-btn.running { background: red; }
-
-    .toast {
-        background: rgba(44,203,74,0.9);
-        padding: 10px 15px;
-        border-radius: 20px;
-        margin: 5px;
-    }
+<meta charset="UTF-8">
+<title>Aviator Fixed</title>
+<style>
+body { background:#0b0e11; color:white; font-family:Arial; text-align:center; }
+canvas { background:#141921; display:block; margin:20px auto; border:1px solid #333; }
+button { padding:10px 20px; font-size:16px; }
 </style>
-
 </head>
-<body><div id="splash-screen">
-    <div class="rocket-loader">🚀</div>
-    <div class="loading-text">KALGAMES</div>
-</div><div class="top-bar">
-    <div class="logo">🚀 Aviator <span>Pro</span></div>
-    <div class="balance-container"><span id="balance-amount">1000.00</span> ETB</div>
-</div><div class="game-wrapper">
-    <div class="multiplier-display" id="multiplier-text">Waiting...</div>
-    <canvas id="gameCanvas"></canvas>
-</div><button class="main-bet-btn" id="btn-1" onclick="placeBet(1)">BET<br><span id="sub-1">40 ETB</span></button>
+<body>
+
+<h2>🚀 Aviator Fixed Test</h2>
+<div id="mult">1.00x</div>
+<canvas id="c" width="400" height="200"></canvas>
+<br>
+<button onclick="startGame()">Start</button>
 
 <script>
-let balance = 1000;
-let gameState = "waiting";
-let multiplier = 1;
-let crashPoint = 1;
-let bet1 = {amount:0,status:"idle"};
+let canvas = document.getElementById("c");
+let ctx = canvas.getContext("2d");
 
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+let mult = 1;
+let running = false;
+let x = 20;
+let y = 180;
 
-function resize(){
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-}
-window.addEventListener("resize",resize);
-resize();
+function draw(){
+    ctx.clearRect(0,0,400,200);
 
-function updateBalance(val){
-    balance += val;
-    document.getElementById("balance-amount").innerText = balance.toFixed(2);
-}
+    ctx.fillStyle="red";
+    ctx.beginPath();
+    ctx.arc(x,y,10,0,Math.PI*2);
+    ctx.fill();
 
-function showToast(msg){
-    const d = document.createElement("div");
-    d.className="toast";
-    d.innerText=msg;
-    document.body.appendChild(d);
-    setTimeout(()=>d.remove(),2000);
-}
+    if(running){
+        mult += 0.02;
+        x += 1;
+        y -= 0.5;
 
-function generateCrash(){
-    return (1 + Math.random()*5).toFixed(2);
-}
+        document.getElementById("mult").innerText = mult.toFixed(2)+"x";
 
-function placeBet(id){
-    let btn = document.getElementById("btn-1");
-    let amt = 40;
-
-    if(gameState=="waiting" && bet1.status=="idle"){
-        if(balance<amt) return showToast("Not enough balance");
-        bet1.amount=amt;
-        bet1.status="waiting";
-        updateBalance(-amt);
-        btn.innerHTML="WAITING<br><span>Cancel</span>";
-        btn.className="main-bet-btn waiting";
-    }
-    else if(gameState=="waiting" && bet1.status=="waiting"){
-        updateBalance(bet1.amount);
-        bet1={amount:0,status:"idle"};
-        btn.innerHTML="BET<br><span>40 ETB</span>";
-        btn.className="main-bet-btn";
-    }
-    else if(gameState=="running" && bet1.status=="active"){
-        cashout();
-    }
-}
-
-function cashout(){
-    let win = bet1.amount * multiplier;
-    updateBalance(win);
-    showToast("Win: "+win.toFixed(2));
-    bet1={amount:0,status:"idle"};
-}
-
-function start(){
-    gameState="running";
-    multiplier=1;
-    crashPoint=generateCrash();
-    if(bet1.status=="waiting") bet1.status="active";
-}
-
-function end(){
-    gameState="waiting";
-    setTimeout(start,3000);
-}
-
-function loop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    if(gameState=="running"){
-        multiplier += 0.02;
-        document.getElementById("multiplier-text").innerText=multiplier.toFixed(2)+"x";
-
-        if(multiplier>=crashPoint){ end(); }
-    } else {
-        document.getElementById("multiplier-text").innerText="Waiting...";
+        if(mult > 5){
+            running = false;
+            alert("Crashed at "+mult.toFixed(2));
+        }
     }
 
-    requestAnimationFrame(loop);
+    requestAnimationFrame(draw);
 }
 
-setTimeout(start,2000);
-loop();
-</script></body>
+function startGame(){
+    mult = 1;
+    x = 20;
+    y = 180;
+    running = true;
+}
+
+draw();
+</script>
+
+</body>
 </html>
