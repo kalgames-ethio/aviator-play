@@ -2,7 +2,7 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Kalgames Aviator Pro - Ultimate Edition</title>  
+    <title>Kalgames Aviator Pro - Enhanced Edition</title>  
     <style>  
         /* Base & Reset Styles */  
         * {  
@@ -138,11 +138,11 @@
     .sub-section h3 { font-size: 13px; color: #7a8b9e; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }  
     .list-item { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #1f2630; }  
 
-    /* Updated Asset Gallery Grid for the 6 new images */  
-    .asset-gallery { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }  
+    /* Asset Panel Grid for New Uploads */  
+    .asset-gallery { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }  
     .asset-card { background: #111419; border: 1px solid #232a33; border-radius: 6px; padding: 2px; text-align: center; }  
-    .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(20%); transition: transform 0.2s, filter 0.2s; }  
-    .asset-card img:hover { filter: grayscale(0%); transform: scale(1.03); }  
+    .asset-card img { width: 100%; height: auto; border-radius: 4px; display: block; filter: grayscale(30%); transition: filter 0.2s; }  
+    .asset-card img:hover { filter: grayscale(0%); }  
 
     /* Custom Toast Container */  
     #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; }  
@@ -238,12 +238,11 @@
         </div>  
 
         <div class="asset-gallery">  
-            <div class="asset-card"><img src="1000002613.jpg" alt="Asset 13"></div>  
-            <div class="asset-card"><img src="1000002614.jpg" alt="Asset 14"></div>  
-            <div class="asset-card"><img src="1000002615.jpg" alt="Asset 15"></div>  
-            <div class="asset-card"><img src="1000002616.jpg" alt="Asset 16"></div>  
-            <div class="asset-card"><img src="1000002617.jpg" alt="Asset 17"></div>  
-            <div class="asset-card"><img src="1000002618.jpg" alt="Asset 18"></div>  
+            <div class="asset-card"><img src="1000002609.jpg" alt="A1"></div>  
+            <div class="asset-card"><img src="1000002610.jpg" alt="A2"></div>  
+            <div class="asset-card"><img src="1000002611.jpg" alt="A3"></div>  
+            <div class="asset-card"><img src="1000002612.jpg" alt="A4"></div>  
+            <div class="asset-card"><img src="1000002613.jpg" alt="A5"></div>  
         </div>  
     </div>  
 
@@ -307,15 +306,8 @@
     let isPlaneLoaded = false;  
     planeImg.onload = () => { isPlaneLoaded = true; };  
 
-    // Updated Array for the 6 newly uploaded image assets  
-    const assetSrcs = [  
-        "1000002613.jpg",   
-        "1000002614.jpg",   
-        "1000002615.jpg",   
-        "1000002616.jpg",   
-        "1000002617.jpg",   
-        "1000002618.jpg"  
-    ];  
+    // Preloading the 5 new structural uploaded assets  
+    const assetSrcs = ["1000002609.jpg", "1000002610.jpg", "1000002611.jpg", "1000002612.jpg", "1000002613.jpg"];  
     const gameAssets = [];  
     assetSrcs.forEach(src => {  
         let img = new Image();  
@@ -332,15 +324,8 @@
     let bet1 = { amount: 0, status: 'idle' };  
     let bet2 = { amount: 0, status: 'idle' };  
 
-    // Particles system for background floating images  
-    let backgroundParticles = [];  
-    for(let i=0; i<6; i++) {   
-        backgroundParticles.push({   
-            x: Math.random() * 500,   
-            y: Math.random() * 150,   
-            speed: 0.3 + Math.random() * 0.4   
-        });   
-    }  
+    let clouds = [];  
+    for(let i=0; i<6; i++) { clouds.push({ x: Math.random() * 400, y: Math.random() * 120, speed: 0.4 + Math.random() * 0.5 }); }  
 
     function showToast(message) {  
         const container = document.getElementById('toast-container');  
@@ -479,7 +464,7 @@
         }, 3000);  
     }  
 
-    // DrawJet Core Function  
+    // DrawJet Engine Function  
     function drawJet(x, y) {  
         ctx.save();  
         ctx.translate(x, y);  
@@ -498,7 +483,7 @@
             ctx.beginPath(); ctx.moveTo(15, 0); ctx.quadraticCurveTo(5, -5, -10, -3); ctx.lineTo(-14, 0); ctx.lineTo(-10, 5); ctx.closePath(); ctx.fill();  
         }  
 
-        // Engine flame design  
+        // Engine flame  
         ctx.beginPath();  
         ctx.moveTo(-28, 0);  
         ctx.lineTo(-45, -6);  
@@ -519,22 +504,21 @@
     function draw() {  
         ctx.clearRect(0, 0, canvas.width, canvas.height);  
 
-        // Floating Background Asset Particles Layer (Using the new 6 images)  
-        backgroundParticles.forEach((p, index) => {  
+        // Floating Dynamic Assets / Cloud Particles Layer  
+        clouds.forEach((c, index) => {  
             ctx.save();  
-            let assetIndex = index % gameAssets.length;  
-            if (gameAssets[assetIndex] && gameAssets[assetIndex].complete) {  
-                ctx.globalAlpha = 0.12; // Translucent floating effect  
-                ctx.drawImage(gameAssets[assetIndex], p.x, p.y, 28, 28);  
+            // Using images for unique graphic layers dynamically  
+            if (gameAssets[index % gameAssets.length] && gameAssets[index % gameAssets.length].complete) {  
+                ctx.globalAlpha = 0.15;  
+                ctx.drawImage(gameAssets[index % gameAssets.length], c.x, c.y, 25, 25);  
             } else {  
-                ctx.beginPath(); ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);  
-                ctx.fillStyle = "rgba(40, 50, 68, 0.1)"; ctx.fill();  
+                ctx.beginPath(); ctx.arc(c.x, c.y, 15, 0, Math.PI * 2);  
+                ctx.fillStyle = "rgba(40, 50, 68, 0.12)"; ctx.fill();  
             }  
             ctx.restore();  
 
-            // Dynamic speed adjustments based on game status  
-            p.x -= gameState === "running" ? p.speed * (multiplier * 0.4) : p.speed * 0.15;  
-            if(p.x < -40) p.x = canvas.width + 30;  
+            c.x -= gameState === "running" ? c.speed * (multiplier * 0.4) : c.speed * 0.15;  
+            if(c.x < -50) c.x = canvas.width + 20;  
         });  
 
         if (gameState === "running") {  
